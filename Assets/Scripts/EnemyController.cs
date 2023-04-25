@@ -35,11 +35,11 @@ namespace App
             _bt.SetVariableValue("Target", enemy);
             if (hp == 0)
             {
+                GetComponent<NavMeshAgent>().isStopped = true;
                 GetComponent<NavMeshAgent>().enabled = false;
                 gameObject.SetActive(false);
                 _bt.DisableBehavior();
             }
-            print("enemy get dmg: " + demage);
         }
     }
 }

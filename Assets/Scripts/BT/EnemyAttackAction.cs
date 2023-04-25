@@ -9,7 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if(target.Value != null) 
+            if(target.Value != null && target.Value.activeSelf) 
             {
                 target.Value.GetComponent<PlayerController>().GetDemage(demage.Value, Owner.gameObject);
                 return TaskStatus.Success;

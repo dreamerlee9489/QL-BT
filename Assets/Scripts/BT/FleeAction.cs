@@ -1,5 +1,3 @@
-using BehaviorDesigner.Runtime.Tasks.Movement;
-using BehaviorDesigner.Runtime;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement

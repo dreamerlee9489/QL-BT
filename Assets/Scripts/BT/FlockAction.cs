@@ -33,20 +33,23 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             // Determine a destination for each agent
             for (int i = 0; i < agents.Length; ++i)
             {
-                Vector3 alignment, cohesion, separation;
-                // determineFlockAttributes will determine which direction to head, which common position to move toward, and how far apart each agent is from one another,
-                DetermineFlockParameters(i, out alignment, out cohesion, out separation);
-                // Weigh each parameter to give one more of an influence than another
-                var velocity = alignment * alignmentWeight.Value + cohesion * cohesionWeight.Value + separation * separationWeight.Value;
-                if (velocity.magnitude == 0 && startTime + waitDuration < Time.time)
-                    return TaskStatus.Failure;
-                //Debug.Log(Owner.gameObject.name + " velocity " + velocity.magnitude);
-                // Set the destination based on the velocity multiplied by the look ahead distance
-                if (!SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value))
+                if (agents[i].Value.activeSelf)
                 {
-                    // Go the opposite direction if the destination is invalid
-                    velocity *= -1;
-                    SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value);
+                    Vector3 alignment, cohesion, separation;
+                    // determineFlockAttributes will determine which direction to head, which common position to move toward, and how far apart each agent is from one another,
+                    DetermineFlockParameters(i, out alignment, out cohesion, out separation);
+                    // Weigh each parameter to give one more of an influence than another
+                    var velocity = alignment * alignmentWeight.Value + cohesion * cohesionWeight.Value + separation * separationWeight.Value;
+                    if (velocity.magnitude == 0 && startTime + waitDuration < Time.time)
+                        return TaskStatus.Failure;
+                    //Debug.Log(Owner.gameObject.name + " velocity " + velocity.magnitude);
+                    // Set the destination based on the velocity multiplied by the look ahead distance
+                    if (!SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value))
+                    {
+                        // Go the opposite direction if the destination is invalid
+                        velocity *= -1;
+                        SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value);
+                    }
                 }
             }
             return TaskStatus.Running;
@@ -82,9 +85,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             // Don't move if there are no neighbors
             if (neighborCount == 0)
-            {
                 return;
-            }
             // Normalize all of the values
             alignment = (alignment / neighborCount).normalized;
             cohesion = ((cohesion / neighborCount) - agentPosition).normalized;
@@ -95,7 +96,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             base.OnReset();
-
             neighborDistance = 100;
             lookAheadDistance = 5;
             alignmentWeight = 0.4f;

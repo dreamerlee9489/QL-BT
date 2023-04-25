@@ -25,7 +25,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 navMeshAgents[i] = agents[i].Value.GetComponent<NavMeshAgent>();
                 navMeshAgents[i].speed = speed.Value;
                 navMeshAgents[i].angularSpeed = angularSpeed.Value;
-                navMeshAgents[i].isStopped = false;
+                if (navMeshAgents[i].enabled)
+                    navMeshAgents[i].isStopped = false;
             }
         }
 
@@ -46,7 +47,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             // Disable the nav mesh
             for (int i = 0; i < navMeshAgents.Length; ++i) {
-                if (navMeshAgents[i] != null) {
+                if (navMeshAgents[i] != null && navMeshAgents[i].enabled) {
                     navMeshAgents[i].isStopped = true;
                 }
             }

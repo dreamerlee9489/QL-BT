@@ -24,13 +24,13 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            // The task is done waiting if the time waitDuration has elapsed since the task was started.
+            if (!target.Value.activeSelf)
+                return TaskStatus.Failure;
             if (startTime + waitDuration < Time.time)
             {
                 target.Value.GetComponent<EnemyController>().GetDemage(5, Owner.gameObject);
                 return TaskStatus.Success;
             }
-            // Otherwise we are still waiting.
             return TaskStatus.Running;
         }
 
