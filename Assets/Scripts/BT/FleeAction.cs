@@ -4,53 +4,55 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
     public class FleeAction : NavMeshMovement
     {
-        public SharedFloat fleedDistance = 20;
-        public SharedFloat lookAheadDistance = 5;
+        public SharedFloat fleedDistance;
+        public SharedFloat lookAheadDistance;
         public SharedGameObject target;
+
+        private bool hasMoved;
 
         public override void OnStart()
         {
             base.OnStart();
+            hasMoved = false;
             SetDestination(Target());
         }
 
-        // Flee from the target. Return success once the agent has fleed the target by moving far enough away from it
-        // Return running if the agent is still fleeing
         public override TaskStatus OnUpdate()
         {
-            float distance = Vector3.Magnitude(transform.position - target.Value.transform.position);
-            if (distance > fleedDistance.Value)
+            if (Vector3.Magnitude(transform.position - target.Value.transform.position) > fleedDistance.Value)
                 return TaskStatus.Success;
-            if (HasArrived() && !SetDestination(Target()))
+
+            if (HasArrived())
             {
-                SetDestination(Target(-1));
+                if (!hasMoved)
+                    return TaskStatus.Failure;
+                if (!SetDestination(Target()))
+                    return TaskStatus.Failure;
+                hasMoved = false;
+            }
+            else
+            {
+                var velocityMagnitude = Velocity().sqrMagnitude;
+                if (hasMoved && velocityMagnitude <= 0f)
+                    return TaskStatus.Failure;
+                hasMoved = velocityMagnitude > 0f;
             }
 
             return TaskStatus.Running;
         }
 
-        // Flee in the opposite direction
-        private Vector3 Target(int dir = 1)
+        private Vector3 Target()
         {
-            if (dir != 1)
-            {
-                Vector3 randVec = new Vector3(Random.Range(0.0f, 5.0f), 0, Random.Range(0.0f, 5.0f)) + target.Value.transform.position - transform.position;
-                return transform.position + lookAheadDistance.Value * randVec.normalized;
-            }
-            return transform.position + lookAheadDistance.Value * (transform.position - target.Value.transform.position).normalized;
+            return transform.position + (transform.position - target.Value.transform.position).normalized * lookAheadDistance.Value;
         }
 
-        // Return false if the position isn't valid on the NavMesh.
         protected override bool SetDestination(Vector3 destination)
         {
             if (!SamplePosition(destination))
-            {
                 return false;
-            }
             return base.SetDestination(destination);
         }
 
-        // Reset the public variables
         public override void OnReset()
         {
             base.OnReset();

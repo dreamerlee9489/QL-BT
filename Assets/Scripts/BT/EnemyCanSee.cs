@@ -5,37 +5,43 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class EnemyCanSee : Conditional
     {
-        //public SharedFloat viewAngle = 120;
-        public SharedFloat viewDist = 30;
-        public SharedGameObject target;
-
-        private GameObject[] players;
+        private SharedFloat _viewDist;
+        private SharedGameObject _target;
 
         public override void OnAwake()
         {
-            players = EnemyController.players;
+            _viewDist = Owner.GetVariable("ViewDist") as SharedFloat;
+            _target = Owner.GetVariable("NearRabbit") as SharedGameObject;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (target.Value != null && target.Value.activeSelf)
-                return TaskStatus.Success;
-            for (int i = 0; i < players.Length; ++i)
+            if (_target.Value != null && _target.Value.GetComponent<RabbitController>().CanBeSee())
             {
-                if (players[i].activeSelf && CanSee(players[i]))
+                if (Vector3.Distance(transform.position, _target.Value.transform.position) <= _viewDist.Value)
+                    return TaskStatus.Success;
+                else
                 {
-                    target.Value = players[i];
+                    _target.Value = null;
+                    return TaskStatus.Failure;
+                }
+            }
+            for (int i = 0; i < FoxController.rabbits.Length; ++i)
+            {
+                if (CanSee(FoxController.rabbits[i]))
+                {
+                    _target.Value = FoxController.rabbits[i];
                     return TaskStatus.Success;
                 }
             }
             return TaskStatus.Failure;
         }
 
-        private bool CanSee(GameObject gameObject, SharedFloat viewAngle = null)
+        private bool CanSee(GameObject gameObject)
         {
+            if (!gameObject.GetComponent<RabbitController>().CanBeSee()) return false;
             Vector3 direction = gameObject.transform.position - transform.position;
-            //return direction.magnitude <= viewDist.Value && Vector3.Angle(direction, transform.forward) < viewAngle.Value;
-            return direction.magnitude <= viewDist.Value;
+            return direction.magnitude <= _viewDist.Value;
         }
     }
 }

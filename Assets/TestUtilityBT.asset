@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: TestUtilityBT
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior 2
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(238.321838,570.4997)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.UtilitySelector","NodeData":{"Offset":"(-6.13427734,122.530663)"},"ID":1,"Name":"Utility
+        Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-100.895981,124.556152)"},"ID":2,"Name":"Eat","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestCondition1","NodeData":{"Offset":"(-84.76417,123.504761)"},"ID":3,"Name":"EatCondition","Instant":true,"SharedFloatutility1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u1","IsShared":true,"SinglemValue":0},"SharedFloatutility2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u2","IsShared":true,"SinglemValue":0},"SharedInthp":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction1","NodeData":{"Offset":"(41.6279,115.284363)"},"ID":4,"Name":"EatAction","Instant":true,"SharedFloatutility1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u1","IsShared":true,"SinglemValue":0}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(117.735687,123.504944)"},"ID":5,"Name":"Play","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestCondition2","NodeData":{"Offset":"(-38.3753967,117.3938)"},"ID":6,"Name":"PlayCondition","Instant":true,"SharedFloatutility1":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u1","IsShared":true,"SinglemValue":0},"SharedFloatutility2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u2","IsShared":true,"SinglemValue":0},"SharedInthp":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0}},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction2","NodeData":{"Offset":"(83.33331,114.999725)"},"ID":7,"Name":"PlayAction","Instant":true,"SharedFloatutility2":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u2","IsShared":true,"SinglemValue":0}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u1","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"u2","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HP","IsShared":true,"Int32mValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.3

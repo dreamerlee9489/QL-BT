@@ -15,7 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override void OnAwake()
         {
-            var temp = GameObject.FindGameObjectsWithTag("Player");
+            var temp = GameObject.FindGameObjectsWithTag("Rabbit");
             agents = new SharedGameObject[temp.Length];
             for (int i = 0; i < agents.Length; i++)
                 agents[i] = new SharedGameObject() { Value = temp[i] };

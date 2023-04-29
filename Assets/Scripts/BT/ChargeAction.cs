@@ -5,53 +5,35 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class ChargeAction : Action
     {
-        public SharedFloat waitTime = 1;
-        public SharedGameObject target;
+        private SharedGameObject _target;
+        private SharedFloat _arriveDist, _attackCD;
+        private SharedInt _demage;
 
-        // The time to wait
-        private float waitDuration;
-        // The time that the task started to wait.
-        private float startTime;
-        // Remember the time that the task is paused so the time paused doesn't contribute to the wait time.
-        private float pauseTime;
-
-        public override void OnStart()
+        public override void OnAwake()
         {
-            // Remember the start time.
-            startTime = Time.time;
-            waitDuration = waitTime.Value;
+            _target = Owner.GetVariable("NearFox") as SharedGameObject;
+            _demage = Owner.GetVariable("Demage") as SharedInt;
+            _arriveDist = Owner.GetVariable("ArriveDist") as SharedFloat;
+            _attackCD = Owner.GetVariable("AttackCD") as SharedFloat;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (!target.Value.activeSelf)
-                return TaskStatus.Failure;
-            if (startTime + waitDuration < Time.time)
+            if (_attackCD.Value > 0)
             {
-                target.Value.GetComponent<EnemyController>().GetDemage(5, Owner.gameObject);
-                return TaskStatus.Success;
+                _attackCD.Value = Mathf.Max(_attackCD.Value - Time.deltaTime, 0);
+                return TaskStatus.Running;
             }
-            return TaskStatus.Running;
-        }
-
-        public override void OnPause(bool paused)
-        {
-            if (paused)
+            if (_target.Value != null && _target.Value.activeSelf)
             {
-                // Remember the time that the behavior was paused.
-                pauseTime = Time.time;
+                if (Vector3.Distance(_target.Value.transform.position, Owner.transform.position) <= _arriveDist.Value)
+                {
+                    _attackCD = 1;
+                    _target.Value.GetComponent<FoxController>().GetDemage(_demage.Value, Owner.gameObject);
+                    return TaskStatus.Success;
+                }
             }
-            else
-            {
-                // Add the difference between Time.time and pauseTime to figure out a new start time.
-                startTime += (Time.time - pauseTime);
-            }
-        }
-
-        public override void OnReset()
-        {
-            // Reset the public properties back to their original values
-            waitTime = 1;
+            return TaskStatus.Failure;
         }
     }
 }

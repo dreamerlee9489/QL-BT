@@ -13,11 +13,11 @@ namespace BehaviorDesigner.Runtime.Tasks
         private float startTime;
         // Remember the time that the task is paused so the time paused doesn't contribute to the wait time.
         private float pauseTime;
-        private PlayerController _owner;
+        private RabbitController _owner;
 
         public override void OnAwake()
         {
-            _owner = Owner.gameObject.GetComponent<PlayerController>();
+            _owner = Owner.gameObject.GetComponent<RabbitController>();
         }
 
         public override void OnStart()

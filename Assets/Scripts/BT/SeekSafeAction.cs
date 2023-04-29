@@ -1,3 +1,4 @@
+using App;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using UnityEngine;
 
@@ -14,17 +15,17 @@ namespace BehaviorDesigner.Runtime.Tasks
             SetDestination(Target());
         }
 
-        // Seek the destination. Return success once the agent has reached the destination.
-        // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())
+            {
+                GameMgr.Instance.RabbitEnterSafe(navMeshAgent);
                 return TaskStatus.Success;
+            }
             SetDestination(Target());
             return TaskStatus.Running;
         }
 
-        // Return targetPosition if target is null
         private Vector3 Target()
         {
             if (target.Value != null)

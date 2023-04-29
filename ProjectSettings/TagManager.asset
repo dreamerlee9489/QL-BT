@@ -4,9 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
   - SafePos
   - FoodPos
+  - Fox
+  - Rabbit
   layers:
   - Default
   - TransparentFX
