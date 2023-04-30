@@ -21,19 +21,22 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnStart()
         {
             base.OnStart();
-
-            targetPosition = target.Value.transform.position;
-            SetDestination(Target());
+            if (target.Value != null)
+            {
+                targetPosition = target.Value.transform.position;
+                SetDestination(Target());
+            }
         }
 
         // Pursue the destination. Return success once the agent has reached the destination.
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
+            if (target.Value == null)
+                return TaskStatus.Failure;
             if (HasArrived()) {
                 return TaskStatus.Success;
             }
-
             // Target will return the predicated position
             SetDestination(Target());
             return TaskStatus.Running;

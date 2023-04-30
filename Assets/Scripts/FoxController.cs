@@ -12,30 +12,30 @@ namespace App
         public TMP_Text text;
 
         private BehaviorTree _bt;
-        private SharedGameObject _nearRabbit;
-        public static GameObject[] rabbits, foxs;
+        public SharedGameObject nearRabbit;
 
         private void Awake()
         {
             _bt = GetComponent<BehaviorTree>();
-            _nearRabbit = _bt.GetVariable("NearRabbit") as SharedGameObject;
+            nearRabbit = _bt.GetVariable("NearRabbit") as SharedGameObject;
             _bt.DisableBehavior();
         }
 
         private void Start()
         {
-            rabbits ??= GameObject.FindGameObjectsWithTag("Rabbit");
-            foxs ??= GameObject.FindGameObjectsWithTag("Fox");
+            _bt.RestartWhenComplete = true;
             _bt.EnableBehavior();
         }
 
-        public void GetDemage(int demage, GameObject enemy)
+        public void GetDemage(int demage, RabbitController enemy)
         {
-            _nearRabbit.Value = enemy;
             hp = Math.Max(hp - demage, 0);
             text.text = hp.ToString();
             if (hp == 0)
+            {
+                enemy.nearFox.Value = null;
                 GameMgr.Instance.FoxIsDead(GetComponent<NavMeshAgent>());
+            }
         }
     }
 }

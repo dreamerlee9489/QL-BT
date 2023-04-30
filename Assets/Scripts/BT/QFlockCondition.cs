@@ -1,36 +1,38 @@
 using App;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class QFlockCondition : Conditional
     {
         private SharedInt _state;
-        private Dictionary<int, float> utilitys = new();
+        private Dictionary<int, float> bestStates = new();
 
         public override void OnAwake()
         {
             _state = Owner.GetVariable("State") as SharedInt;
-            float[][] qTable = GameMgr.Instance.qTable;
+            List<List<float>> qTable = GameMgr.Instance.qTable;
             for (int i = 0; i < 1024; ++i)
             {
-                if (qTable[i][(int)ActionSpace.Flock] == qTable[i].Max())
-                    utilitys.Add(i, qTable[i][(int)ActionSpace.Flock]);
+                float max = qTable[i].Max();
+                if (max > 0 && max == qTable[i][(int)ActionSpace.Flock])
+                    bestStates.Add(i, qTable[i][(int)ActionSpace.Flock]);
             }
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (utilitys.ContainsKey(_state.Value))
+            if (bestStates.ContainsKey(_state.Value))
                 return TaskStatus.Success;
             return TaskStatus.Failure;
         }
 
         public override float GetUtility()
         {
-            if (utilitys.ContainsKey(_state.Value))
-                return utilitys[_state.Value];
+            if (bestStates.ContainsKey(_state.Value))
+                return bestStates[_state.Value];
             return 0;
         }
     }

@@ -7,30 +7,31 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class QWanderCondition : Conditional
     {
         private SharedInt _state;
-        private Dictionary<int, float> utilitys = new();
+        private Dictionary<int, float> bestStates = new();
 
         public override void OnAwake()
         {
             _state = Owner.GetVariable("State") as SharedInt;
-            float[][] qTable = GameMgr.Instance.qTable;
+            List<List<float>> qTable = GameMgr.Instance.qTable;
             for (int i = 0; i < 1024; ++i)
             {
-                if (qTable[i][5] == qTable[i].Max())
-                    utilitys.Add(i, qTable[i][5]);
+                float max = qTable[i].Max();
+                if (max > 0 && max == qTable[i][(int)ActionSpace.Wander])
+                    bestStates.Add(i, qTable[i][(int)ActionSpace.Wander]);
             }
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (utilitys.ContainsKey(_state.Value))
+            if (bestStates.ContainsKey(_state.Value))
                 return TaskStatus.Success;
             return TaskStatus.Failure;
         }
 
         public override float GetUtility()
         {
-            if (utilitys.ContainsKey(_state.Value))
-                return utilitys[_state.Value];
+            if (bestStates.ContainsKey(_state.Value))
+                return bestStates[_state.Value];
             return 0;
         }
     }

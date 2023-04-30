@@ -1,32 +1,39 @@
 using App;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class QFleeCondition : Conditional
     {
         private SharedFloat _fleeCD;
-        private SharedInt _state;
+        private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox, _state;
         private SharedGameObject _target;
-        private Dictionary<int, float> utilitys = new();
+        private Dictionary<int, float> bestStates = new();
 
         public override void OnAwake()
         {
             _fleeCD = Owner.GetVariable("FleeCD") as SharedFloat;
+            _heathLv = Owner.GetVariable("HealthLevel") as SharedInt;
+            _neighNum = Owner.GetVariable("NeighNum") as SharedInt;
+            _distFood = Owner.GetVariable("DistFood") as SharedInt;
+            _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
+            _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _state = Owner.GetVariable("State") as SharedInt;
             _target = Owner.GetVariable("NearFox") as SharedGameObject;
-            float[][] qTable = GameMgr.Instance.qTable;
+            List<List<float>> qTable = GameMgr.Instance.qTable;
             for (int i = 0; i < 1024; ++i)
             {
-                if (qTable[i][0] == qTable[i].Max())
-                    utilitys.Add(i, qTable[i][0]);
+                float max = qTable[i].Max();
+                if (max > 0 && max == qTable[i][0])
+                    bestStates.Add(i, qTable[i][0]);
             }
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_target.Value != null && _fleeCD.Value == 0 && utilitys.ContainsKey(_state.Value))
+            if (_target.Value != null && _fleeCD.Value == 0 && bestStates.ContainsKey(_state.Value))
             {
                 _fleeCD.Value = 4;
                 return TaskStatus.Success;
@@ -36,8 +43,8 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override float GetUtility()
         {
-            if (utilitys.ContainsKey(_state.Value))
-                return utilitys[_state.Value];
+            if (bestStates.ContainsKey(_state.Value))
+                return bestStates[_state.Value];
             return 0;
         }
     }

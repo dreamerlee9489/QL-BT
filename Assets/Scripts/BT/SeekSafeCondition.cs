@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class SeekSafeCondition : Conditional

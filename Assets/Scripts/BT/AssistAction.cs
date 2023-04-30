@@ -29,7 +29,7 @@ namespace BehaviorDesigner.Runtime.Tasks
                 if (Vector3.Distance(_target.Value.transform.position, Owner.transform.position) <= _arriveDist.Value)
                 {
                     _attackCD = 1;
-                    _target.Value.GetComponent<FoxController>().GetDemage(_demage.Value, Owner.gameObject);
+                    _target.Value.GetComponent<FoxController>().GetDemage(_demage.Value, Owner.GetComponent<RabbitController>());
                     return TaskStatus.Success;
                 }
             }
