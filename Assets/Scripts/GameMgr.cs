@@ -16,8 +16,8 @@ namespace App
     public class GameMgr : MonoBehaviour
     {
         private bool _gameOver = false;
-        private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum;
-        private float _avgRabbitHp, _avgFoxHp, _timer;
+        private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum, _camIdx;
+        private float _avgRabbitHp, _avgFoxHp, _gameTimer, _camTimer;
         private static GameMgr _instance = null;
         private static List<GameObject> _foods = new(), _safes = new(), _rabbits = new(), _foxs = new();
 
@@ -52,6 +52,7 @@ namespace App
             }
             _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
             _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
+            Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
             ResetGame();
         }
 
@@ -59,10 +60,24 @@ namespace App
         {
             if (!_gameOver && _round <= roundNum)
             {
-                _timer += Time.deltaTime;
-                if (_timer >= 180.0f)
+                _gameTimer += Time.deltaTime;
+                _camTimer += Time.deltaTime;
+                if (_gameTimer >= 180.0f)
                     RecordGame(isQL, "Time Over");
+                if (_camTimer >= 10.0f)
+                {
+                    _camTimer = 0;
+                    _camIdx = -1;
+                    do _camIdx = Random.Range(0, _rabbits.Count);
+                    while (!_rabbits[_camIdx].activeSelf);
+                }
             }
+        }
+
+        private void LateUpdate()
+        {
+            if (!_gameOver)
+                Camera.main.transform.position = _rabbits[_camIdx].transform.position + new Vector3(0, 50, 0);
         }
 
         private void ResetGame()
@@ -87,12 +102,13 @@ namespace App
                     fox.name = "Fox " + i;
                     _foxs.Add(fox);
                 }
+                _camIdx = Random.Range(0, rabbitNum);
                 _liveRabbitNum = rabbitNum;
                 _liveFoxNum = foxNum;
                 _safeRabbitNum = 0;
                 _avgRabbitHp = 0;
                 _avgFoxHp = 0;
-                _timer = 0;
+                _gameTimer = 0;
                 roundText.text = _round.ToString();
                 liveRabbitText.text = _liveRabbitNum.ToString();
                 safeRabbitText.text = _safeRabbitNum.ToString();

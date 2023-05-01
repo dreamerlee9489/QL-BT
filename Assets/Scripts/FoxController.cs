@@ -27,6 +27,11 @@ namespace App
             _bt.EnableBehavior();
         }
 
+        private void FixedUpdate()
+        {
+            text.transform.parent.forward = Camera.main.transform.forward;
+        }
+
         public void GetDemage(int demage, RabbitController enemy)
         {
             hp = Math.Max(hp - demage, 0);

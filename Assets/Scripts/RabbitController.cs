@@ -57,6 +57,7 @@ namespace App
             _distFox.Value = (int)GetDistanceToFox();
             _state.Value = 0;
             _state.Value = (_heathLv.Value << 8) | (_neighNum.Value << 6) | (_distFood.Value << 4) | (_distSafe.Value << 2) | _distFox.Value;
+            text.transform.parent.forward = Camera.main.transform.forward;
         }
 
         public bool CanBeSee()

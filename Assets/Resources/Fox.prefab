@@ -362,7 +362,7 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearRabbit","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ViewDist","IsShared":true,"SinglemValue":30},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"MoveSpeed","IsShared":true,"SinglemValue":12},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AngularSpeed","IsShared":true,"SinglemValue":1200},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ArriveDist","IsShared":true,"SinglemValue":2},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Demage","IsShared":true,"Int32mValue":10},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackCD","IsShared":true,"SinglemValue":0}]}'
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearRabbit","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ViewDist","IsShared":true,"SinglemValue":30},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"MoveSpeed","IsShared":true,"SinglemValue":12},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AngularSpeed","IsShared":true,"SinglemValue":1200},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ArriveDist","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Demage","IsShared":true,"Int32mValue":10},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackCD","IsShared":true,"SinglemValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -388,6 +388,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   text: {fileID: 5950761699779580127}
+  nearRabbit:
+    mIsShared: 0
+    mIsGlobal: 0
+    mIsDynamic: 0
+    mName: 
+    mToolTip: 
+    mPropertyMapping: 
+    mPropertyMappingOwner: {fileID: 0}
+    mValue: {fileID: 0}
 --- !u!1 &5949597106376456600
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,7 +589,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5950761698704635872}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -588,7 +597,7 @@ RectTransform:
   - {fileID: 5950761699779580120}
   m_Father: {fileID: 5945879464155399366}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2}
@@ -730,8 +739,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278255363
+  m_fontColor: {r: 0.010703921, g: 1, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -754,7 +763,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

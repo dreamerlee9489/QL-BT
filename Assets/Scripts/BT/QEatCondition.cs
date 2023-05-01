@@ -9,7 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         private SharedFloat _eatCD;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox, _state;
-        private Dictionary<int, float> bestStates = new();
+        private readonly Dictionary<int, float> _bestStates = new();
 
         public override void OnAwake()
         {
@@ -25,13 +25,13 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 float max = qTable[i].Max();
                 if (max > 0 && max == qTable[i][(int)ActionSpace.Eat])
-                    bestStates.Add(i, qTable[i][(int)ActionSpace.Eat]);
+                    _bestStates.Add(i, qTable[i][(int)ActionSpace.Eat]);
             }
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_eatCD.Value == 0 && bestStates.ContainsKey(_state.Value))
+            if (_eatCD.Value == 0 && _bestStates.ContainsKey(_state.Value))
             {
                 _eatCD.Value = 4;
                 return TaskStatus.Success;
@@ -41,8 +41,8 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override float GetUtility()
         {
-            if (bestStates.ContainsKey(_state.Value))
-                return bestStates[_state.Value];
+            if (_bestStates.ContainsKey(_state.Value))
+                return _bestStates[_state.Value];
             return 0;
         }
     }

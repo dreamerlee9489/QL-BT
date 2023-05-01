@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: d48a7646f5d0547e889733d84b50cb9f, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.09674967, g: 0.35171837, b: 0.7160277, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,8 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 9235e21aad383004ba4815536366ba54, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 524a57629db13534f9840d73594405f8, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -314,8 +314,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 57173534}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.6968552, y: -0.008490668, z: -0.002924949, w: 0.71715564}
+  m_LocalPosition: {x: 4.218338, y: 592.47955, z: -16.759443}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -813,14 +813,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1123079021}
-  m_LocalRotation: {x: 0.69814, y: -0.000725772, z: 0.004040063, w: 0.7159495}
-  m_LocalPosition: {x: 1.9915979, y: 74.42877, z: -3.1866307}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1143105571
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,12 +1094,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5c2a5b4de95e846865af393802ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isQL: 0
-  roundNum: 100
+  isQL: 1
+  roundNum: 5
   foxNum: 20
   rabbitNum: 100
   foxObj: {fileID: 5949500729461695658, guid: c1085ef24b976594aaa75b736d61e7c7, type: 3}
-  rabbitObj: {fileID: 1578168905834550214, guid: 4ed5adcf210afe145835c3e8d70e1186, type: 3}
+  rabbitObj: {fileID: 8721550787481397727, guid: 7fafd84d49ac36e458d3b35689c5bd44, type: 3}
   roundText: {fileID: 1143105573}
   liveRabbitText: {fileID: 991667577}
   safeRabbitText: {fileID: 1097664007}
