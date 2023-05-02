@@ -1,3 +1,4 @@
+using App;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
@@ -14,12 +15,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         private float pauseTime;
         private float destinationReachTime;
 
-        // There is no success or fail state with wander - the agent will just keep wandering
+        public override void OnStart()
+        {
+            base.OnStart();
+            Owner.GetComponent<RabbitController>().goalText.text = "Wander";
+        }
+
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())
             {
-                // The agent should pause at the destination only if the max pause duration is greater than 0
                 if (maxPauseDuration.Value > 0)
                 {
                     if (destinationReachTime == -1)
@@ -29,11 +34,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     }
                     if (destinationReachTime + pauseTime <= Time.time)
                     {
-                        // Only reset the time if a destination has been set.
                         if (TrySetTarget())
-                        {
                             destinationReachTime = -1;
-                        }
                     }
                 }
                 else
@@ -46,6 +48,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 TrySetTarget();
             }
             return TaskStatus.Running;
+        }
+
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private bool TrySetTarget()
@@ -68,7 +75,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return validDestination;
         }
 
-        // Reset the public variables
         public override void OnReset()
         {
             minWanderDistance = 20;

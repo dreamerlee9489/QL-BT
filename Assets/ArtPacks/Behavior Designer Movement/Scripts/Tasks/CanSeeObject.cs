@@ -28,13 +28,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat viewDistance = 1000;
         [Tooltip("The raycast offset relative to the pivot position")]
         public SharedVector3 offset;
-        [Tooltip("The _target raycast offset relative to the pivot position")]
+        [Tooltip("The _nearRabbit raycast offset relative to the pivot position")]
         public SharedVector3 targetOffset;
         [Tooltip("The offset to apply to 2D angles")]
         public SharedFloat angleOffset2D;
-        [Tooltip("Should the _target bone be used?")]
+        [Tooltip("Should the _nearRabbit bone be used?")]
         public SharedBool useTargetBone;
-        [Tooltip("The _target's bone if the _target is a humanoid")]
+        [Tooltip("The _nearRabbit's bone if the _nearRabbit is a humanoid")]
         public HumanBodyBones targetBone;
         [Tooltip("Should a debug look ray be drawn to the scene view?")]
         public SharedBool drawDebugRay;

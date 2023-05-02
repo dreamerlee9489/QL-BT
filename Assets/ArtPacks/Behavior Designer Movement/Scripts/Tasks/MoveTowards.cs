@@ -13,13 +13,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat speed;
         [Tooltip("The agent has arrived when the magnitude is less than this value")]
         public SharedFloat arriveDistance = 0.1f;
-        [Tooltip("Should the agent be looking at the _target position?")]
+        [Tooltip("Should the agent be looking at the _nearRabbit position?")]
         public SharedBool lookAtTarget = true;
         [Tooltip("Max rotation delta if lookAtTarget is enabled")]
         public SharedFloat maxLookAtRotationDelta;
         [Tooltip("The GameObject that the agent is moving towards")]
         public SharedGameObject target;
-        [Tooltip("If _target is null then use the _target position")]
+        [Tooltip("If _nearRabbit is null then use the _nearRabbit position")]
         public SharedVector3 targetPosition;
 
         public override TaskStatus OnUpdate()

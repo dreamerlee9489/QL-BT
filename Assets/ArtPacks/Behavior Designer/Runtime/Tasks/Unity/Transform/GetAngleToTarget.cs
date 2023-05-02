@@ -3,18 +3,18 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform
 {
     [TaskCategory("Unity/Transform")]
-    [TaskDescription("Gets the Angle between a GameObject's forward direction and a _target. Returns Success.")]
+    [TaskDescription("Gets the Angle between a GameObject's forward direction and a _nearRabbit. Returns Success.")]
     public class GetAngleToTarget : Action
     {
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
-        [Tooltip("The _target object to measure the angle to. If null the targetPosition will be used.")]
+        [Tooltip("The _nearRabbit object to measure the angle to. If null the targetPosition will be used.")]
         public SharedGameObject targetObject;
         [Tooltip("The world position to measure an angle to. If the targetObject is also not null, this value is used as an offset from that object's position.")]
         public SharedVector3 targetPosition;
         [Tooltip("Ignore height differences when calculating the angle?")]
         public SharedBool ignoreHeight = true;
-        [Tooltip("The angle to the _target")]
+        [Tooltip("The angle to the _nearRabbit")]
         [RequiredField]
         public SharedFloat storeValue;
 

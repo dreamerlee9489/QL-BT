@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityVector3
 {
     [TaskCategory("Unity/Vector3")]
-    [TaskDescription("Rotate the current rotation to the _target rotation.")]
+    [TaskDescription("Rotate the current rotation to the _nearRabbit rotation.")]
     public class RotateTowards : Action
     {
         [Tooltip("The current rotation in euler angles")]
         public SharedVector3 currentRotation;
-        [Tooltip("The _target rotation in euler angles")]
+        [Tooltip("The _nearRabbit rotation in euler angles")]
         public SharedVector3 targetRotation;
         [Tooltip("The maximum delta of the degrees")]
         public SharedFloat maxDegreesDelta;

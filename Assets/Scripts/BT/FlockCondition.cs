@@ -1,3 +1,5 @@
+using App;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class FlockCondition : Conditional
@@ -17,6 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (_distFox.Value < 2 || _neighNum.Value < 2)
                 return TaskStatus.Failure;
+            Owner.GetComponent<RabbitController>().goalText.text = "Flock";
             return TaskStatus.Success;
         }
     }

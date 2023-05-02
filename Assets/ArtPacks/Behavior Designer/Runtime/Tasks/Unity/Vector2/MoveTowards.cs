@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityVector2
 {
     [TaskCategory("Unity/Vector2")]
-    [TaskDescription("Move from the current position to the _target position.")]
+    [TaskDescription("Move from the current position to the _nearRabbit position.")]
     public class MoveTowards : Action
     {
         [Tooltip("The current position")]
         public SharedVector2 currentPosition;
-        [Tooltip("The _target position")]
+        [Tooltip("The _nearRabbit position")]
         public SharedVector2 targetPosition;
         [Tooltip("The movement speed")]
         public SharedFloat speed;

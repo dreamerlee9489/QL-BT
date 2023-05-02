@@ -28,7 +28,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public LayerMask ignoreLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
         [Tooltip("The raycast offset relative to the pivot position")]
         public SharedVector3 offset;
-        [Tooltip("The _target raycast offset relative to the pivot position")]
+        [Tooltip("The _nearRabbit raycast offset relative to the pivot position")]
         public SharedVector3 targetOffset;
         [Tooltip("Should a debug look ray be drawn to the scene view?")]
         public SharedBool drawDebugRay;

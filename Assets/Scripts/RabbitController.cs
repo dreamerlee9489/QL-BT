@@ -14,7 +14,7 @@ namespace App
 
         public int hp = 100;
         public bool withinSafe = false;
-        public TMP_Text text;
+        public TMP_Text hpText, goalText;
         public SharedGameObject nearFood, nearSafe, nearFox;
 
         private void Awake()
@@ -40,6 +40,7 @@ namespace App
         private void Start()
         {
             GetComponent<NavMeshAgent>().isStopped = false;
+            goalText.text = "";
             _bt.RestartWhenComplete = true;
             _bt.EnableBehavior();
         }
@@ -57,7 +58,7 @@ namespace App
             _distFox.Value = (int)GetDistanceToFox();
             _state.Value = 0;
             _state.Value = (_heathLv.Value << 8) | (_neighNum.Value << 6) | (_distFood.Value << 4) | (_distSafe.Value << 2) | _distFox.Value;
-            text.transform.parent.forward = Camera.main.transform.forward;
+            hpText.transform.parent.forward = Camera.main.transform.forward;
         }
 
         public bool CanBeSee()
@@ -70,7 +71,7 @@ namespace App
         public void GetDemage(int demage, FoxController enemy = null)
         {
             hp = Math.Max(hp - demage, 0);
-            text.text = hp.ToString();
+            hpText.text = hp.ToString();
             if (hp == 0)
             {
                 enemy.nearRabbit.Value = null;
@@ -175,7 +176,7 @@ namespace App
                         }
                     }
                 }
-                this.nearFox.Value = nearFox;
+                this.nearFox.Value = distance <= _viewDist.Value ? nearFox : null;
             }
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;

@@ -20,10 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             if (_fleeCD.Value == 0 && _heathLv.Value < 2 && _distFox.Value < 2 && _distSafe.Value > 1)
-            {
-                _fleeCD.Value = 4;
                 return TaskStatus.Success;
-            }
             return TaskStatus.Failure;
         }
     }

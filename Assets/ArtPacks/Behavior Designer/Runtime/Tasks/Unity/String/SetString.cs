@@ -4,7 +4,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityString
     [TaskDescription("Sets the variable string to the value string.")]
     public class SetString : Action
     {
-        [Tooltip("The _target string")]
+        [Tooltip("The _nearRabbit string")]
         [RequiredField]
         public SharedString variable;
         [Tooltip("The value string")]

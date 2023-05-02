@@ -1,3 +1,4 @@
+using App;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using UnityEngine;
 
@@ -12,10 +13,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             base.OnStart();
             SetDestination(Target());
+            Owner.GetComponent<RabbitController>().goalText.text = "SeekFood";
         }
 
-        // Seek the destination. Return success once the agent has reached the destination.
-        // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())
@@ -24,7 +24,11 @@ namespace BehaviorDesigner.Runtime.Tasks
             return TaskStatus.Running;
         }
 
-        // Return targetPosition if target is null
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().goalText.text = "";
+        }
+
         private Vector3 Target()
         {
             if (target.Value != null)

@@ -18,7 +18,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat maxQueueRadius = 20;
         [Tooltip("The multiplier to slow down if an agent is in front of the current agent")]
         public SharedFloat slowDownSpeed = 0.15f;
-        [Tooltip("The _target to seek towards")]
+        [Tooltip("The _nearRabbit to seek towards")]
         public SharedGameObject target;
 
         // The agents will always be flocking so always return running

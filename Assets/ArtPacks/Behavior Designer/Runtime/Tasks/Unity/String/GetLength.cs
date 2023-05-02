@@ -4,7 +4,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityString
     [TaskDescription("Stores the length of the string")]
     public class GetLength : Action
     {
-        [Tooltip("The _target string")]
+        [Tooltip("The _nearRabbit string")]
         public SharedString targetString;
         [Tooltip("The stored result")]
         [RequiredField]

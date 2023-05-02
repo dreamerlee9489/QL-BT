@@ -17,6 +17,11 @@ namespace BehaviorDesigner.Runtime.Tasks
             _attackCD = Owner.GetVariable("AttackCD") as SharedFloat;
         }
 
+        public override void OnStart()
+        {
+            Owner.GetComponent<RabbitController>().goalText.text = "Charge";
+        }
+
         public override TaskStatus OnUpdate()
         {
             if (_attackCD.Value > 0)
@@ -34,6 +39,11 @@ namespace BehaviorDesigner.Runtime.Tasks
                 }
             }
             return TaskStatus.Failure;
+        }
+
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().goalText.text = "";
         }
     }
 }

@@ -18,11 +18,18 @@ namespace BehaviorDesigner.Runtime.Tasks
         private bool reevaluating;
         // A list of children that can execute.
         private List<int> availableChildren = new List<int>();
+        private SharedFloat _sharedUtitlty;
+
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            _sharedUtitlty = Owner.GetVariable($"{FriendlyName}Utility") as SharedFloat;
+        }
 
         public override void OnStart()
         {
             highestUtility = float.MinValue;
-
             // Loop through each child task and determine its utility. The task with the highest utility will run first.
             availableChildren.Clear();
             for (int i = 0; i < children.Count; ++i) {
@@ -144,6 +151,12 @@ namespace BehaviorDesigner.Runtime.Tasks
                 BehaviorManager.instance.Interrupt(Owner, children[prevChildIndex], this, TaskStatus.Failure);
                 executionStatus = TaskStatus.Inactive;
             }
+        }
+
+        public override float GetUtility()
+        {
+            _sharedUtitlty.Value = base.GetUtility();
+            return _sharedUtitlty.Value;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             base.OnStart();
             SetDestination(Target());
+            Owner.GetComponent<RabbitController>().goalText.text = "SeekSafe";
         }
 
         public override TaskStatus OnUpdate()
@@ -24,6 +25,11 @@ namespace BehaviorDesigner.Runtime.Tasks
             }
             SetDestination(Target());
             return TaskStatus.Running;
+        }
+
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private Vector3 Target()

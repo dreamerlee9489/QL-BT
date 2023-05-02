@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator
 {
     [TaskCategory("Unity/Animator")]
-    [TaskDescription("Interrupts the automatic _target matching. Returns Success.")]
+    [TaskDescription("Interrupts the automatic _nearRabbit matching. Returns Success.")]
     public class InterruptMatchTarget : Action
     {
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
-        [Tooltip("CompleteMatch will make the gameobject match the _target completely at the next frame")]
+        [Tooltip("CompleteMatch will make the gameobject match the _nearRabbit completely at the next frame")]
         public bool completeMatch = true;
 
         private Animator animator;

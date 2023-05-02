@@ -1,7 +1,6 @@
 using App;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
@@ -34,10 +33,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             if (_target.Value != null && _fleeCD.Value == 0 && _bestStates.ContainsKey(_state.Value))
-            {
-                _fleeCD.Value = 4;
                 return TaskStatus.Success;
-            }
             return TaskStatus.Failure;
         }
 

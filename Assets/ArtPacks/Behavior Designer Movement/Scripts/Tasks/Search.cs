@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Search for a _target by combining the wander, within hearing range, and the within seeing range tasks using the Unity NavMesh.")]
+    [TaskDescription("Search for a _nearRabbit by combining the wander, within hearing range, and the within seeing range tasks using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}SearchIcon.png")]
@@ -32,15 +32,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat hearingRadius = 30;
         [Tooltip("The raycast offset relative to the pivot position")]
         public SharedVector3 offset;
-        [Tooltip("The _target raycast offset relative to the pivot position")]
+        [Tooltip("The _nearRabbit raycast offset relative to the pivot position")]
         public SharedVector3 targetOffset;
         [Tooltip("The LayerMask of the objects that we are searching for")]
         public LayerMask objectLayerMask;
         [Tooltip("Specifies the maximum number of colliders that the physics cast can collide with")]
         public int maxCollisionCount = 200;
-        [Tooltip("Should the _target bone be used?")]
+        [Tooltip("Should the _nearRabbit bone be used?")]
         public SharedBool useTargetBone;
-        [Tooltip("The _target's bone if the _target is a humanoid")]
+        [Tooltip("The _nearRabbit's bone if the _nearRabbit is a humanoid")]
         public HumanBodyBones targetBone;
         [Tooltip("Should a debug look ray be drawn to the scene view?")]
         public SharedBool drawDebugRay;

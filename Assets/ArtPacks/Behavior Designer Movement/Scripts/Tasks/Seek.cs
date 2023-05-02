@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Seek the _target specified using the Unity NavMesh.")]
+    [TaskDescription("Seek the _nearRabbit specified using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}SeekIcon.png")]
@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The GameObject that the agent is seeking")]
         public SharedGameObject target;
-        [Tooltip("If _target is null then use the _target position")]
+        [Tooltip("If _nearRabbit is null then use the _nearRabbit position")]
         public SharedVector3 targetPosition;
 
         public override void OnStart()

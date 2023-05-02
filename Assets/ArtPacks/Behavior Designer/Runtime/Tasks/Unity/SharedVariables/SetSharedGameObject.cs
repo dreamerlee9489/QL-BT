@@ -9,7 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.SharedVariables
         [RequiredField]
         [Tooltip("The SharedGameObject to set")]
         public SharedGameObject targetVariable;
-        [Tooltip("Can the _target value be null?")]
+        [Tooltip("Can the _nearRabbit value be null?")]
         public SharedBool valueCanBeNull;
 
         public override TaskStatus OnUpdate()

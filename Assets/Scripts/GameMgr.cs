@@ -23,6 +23,7 @@ namespace App
 
         public bool isQL;
         public int roundNum, foxNum, rabbitNum;
+        public float floorWidth;
         public GameObject foxObj, rabbitObj;
         public Text roundText, liveRabbitText, safeRabbitText, liveFoxText;
         public List<List<float>> qTable = new();
@@ -62,9 +63,9 @@ namespace App
             {
                 _gameTimer += Time.deltaTime;
                 _camTimer += Time.deltaTime;
-                if (_gameTimer >= 180.0f)
+                if (_gameTimer >= 200.0f)
                     RecordGame(isQL, "Time Over");
-                if (_camTimer >= 10.0f)
+                if (_camTimer >= 15.0f)
                 {
                     _camTimer = 0;
                     _camIdx = -1;
@@ -92,13 +93,13 @@ namespace App
             {
                 for (int i = 0; i < rabbitNum; i++)
                 {
-                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-250.0f, 250.0f), 1, Random.Range(-250.0f, 250.0f)), Quaternion.identity);
+                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
                     rabbit.name = "Rabbit " + i;
                     _rabbits.Add(rabbit);
                 }
                 for (int i = 0; i < foxNum; i++)
                 {
-                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-250.0f, 250.0f), 1, Random.Range(-250.0f, 250.0f)), Quaternion.identity);
+                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
                     fox.name = "Fox " + i;
                     _foxs.Add(fox);
                 }

@@ -8,7 +8,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform
     {
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
-        [Tooltip("Can the _target GameObject be empty?")]
+        [Tooltip("Can the _nearRabbit GameObject be empty?")]
         [RequiredField]
         public SharedVector3 storeValue;
 

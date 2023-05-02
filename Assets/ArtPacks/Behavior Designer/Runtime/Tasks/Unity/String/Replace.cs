@@ -4,7 +4,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityString
     [TaskDescription("Replaces a string with the new string")]
     public class Replace : Action
     {
-        [Tooltip("The _target string")]
+        [Tooltip("The _nearRabbit string")]
         public SharedString targetString;
         [Tooltip("The old replace")]
         public SharedString oldString;

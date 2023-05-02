@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Pursue the _target specified using the Unity NavMesh.")]
+    [TaskDescription("Pursue the _nearRabbit specified using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}PursueIcon.png")]
     public class Pursue : NavMeshMovement
     {
-        [Tooltip("How far to predict the distance ahead of the _target. Lower values indicate less distance should be predicated")]
+        [Tooltip("How far to predict the distance ahead of the _nearRabbit. Lower values indicate less distance should be predicated")]
         public SharedFloat targetDistPrediction = 20;
         [Tooltip("Multiplier for predicting the look ahead distance")]
         public SharedFloat targetDistPredictionMult = 20;

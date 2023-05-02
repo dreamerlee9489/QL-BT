@@ -97,22 +97,22 @@ public class BehaviorSelection : MonoBehaviour
         string desc = "";
         switch (selectionType) {
             case BehaviorSelectionType.MoveTowards:
-                desc = "The Move Towards task will move the agent towards the _target (without pathfinding). In this example the green agent is moving towards the red dot.";
+                desc = "The Move Towards task will move the agent towards the _nearRabbit (without pathfinding). In this example the green agent is moving towards the red dot.";
                 break;
             case BehaviorSelectionType.RotateTowards:
-                desc = "The Rotate Towards task rotate the agent towards the _target. In this example the green agent is rotating towards the red dot.";
+                desc = "The Rotate Towards task rotate the agent towards the _nearRabbit. In this example the green agent is rotating towards the red dot.";
                 break;
             case BehaviorSelectionType.Seek:
-                desc = "The Seek task will move the agent towards the _target with pathfinding. In this example the green agent is seeking the red dot (which moves).";
+                desc = "The Seek task will move the agent towards the _nearRabbit with pathfinding. In this example the green agent is seeking the red dot (which moves).";
                 break;
             case BehaviorSelectionType.Flee:
-                desc = "The Flee task will move the agent away from the _target with pathfinding. In this example the green agent is fleeing from red dot (which moves).";
+                desc = "The Flee task will move the agent away from the _nearRabbit with pathfinding. In this example the green agent is fleeing from red dot (which moves).";
                 break;
             case BehaviorSelectionType.Pursue:
-                desc = "The Pursue task is similar to the Seek task except the Pursue task predicts where the _target is going to be in the future. This allows the agent to arrive at the _target earlier than it would have with the Seek task.";
+                desc = "The Pursue task is similar to the Seek task except the Pursue task predicts where the _nearRabbit is going to be in the future. This allows the agent to arrive at the _nearRabbit earlier than it would have with the Seek task.";
                 break;
             case BehaviorSelectionType.Evade:
-                desc = "The Evade task is similar to the Flee task except the Evade task predicts where the _target is going to be in the future. This allows the agent to flee from the _target earlier than it would have with the Flee task.";
+                desc = "The Evade task is similar to the Flee task except the Evade task predicts where the _nearRabbit is going to be in the future. This allows the agent to flee from the _nearRabbit earlier than it would have with the Flee task.";
                 break;
             case BehaviorSelectionType.Follow:
                 desc = "The Follow task will allow the agent to continuously follow a GameObject. In this example the green agent is following the red dot.";
@@ -127,13 +127,13 @@ public class BehaviorSelection : MonoBehaviour
                 desc = "The Wander task moves the agent randomly throughout the map with pathfinding.";
                 break;
             case BehaviorSelectionType.Search:
-                desc = "The Search task will search the map by wandering until it finds the _target. It can find the _target by seeing or hearing the _target. In this example the Search task is looking for the red dot.";
+                desc = "The Search task will search the map by wandering until it finds the _nearRabbit. It can find the _nearRabbit by seeing or hearing the _nearRabbit. In this example the Search task is looking for the red dot.";
                 break;
             case BehaviorSelectionType.WithinDistance:
-                desc = "The Within Distance task is a conditional task that returns success when another object comes within distance of the current agent. In this example the Within Distance task is paired with the Seek task so the agent will move towards the _target as soon as the _target within distance.";
+                desc = "The Within Distance task is a conditional task that returns success when another object comes within distance of the current agent. In this example the Within Distance task is paired with the Seek task so the agent will move towards the _nearRabbit as soon as the _nearRabbit within distance.";
                 break;
             case BehaviorSelectionType.CanSeeObject:
-                desc = "The Can See Object task is a conditional task that returns success when it sees an object in front of the current agent. In this example the Can See Object task is paired with the Seek task so the agent will move towards the _target as soon as the _target is seen.";
+                desc = "The Can See Object task is a conditional task that returns success when it sees an object in front of the current agent. In this example the Can See Object task is paired with the Seek task so the agent will move towards the _nearRabbit as soon as the _nearRabbit is seen.";
                 break;
             case BehaviorSelectionType.CanHearObject:
                 desc = "The Can Hear Object task is a conditional task that returns success when it hears another object. Press the \"Play\" button to emit a sound from the red dot. If the red dot is within range of the agent when the sound is played then the agent will move towards the red dot with the Seek task.";

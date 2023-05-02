@@ -19,7 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedBool onlyY;
         [Tooltip("The GameObject that the agent is rotating towards")]
         public SharedGameObject target;
-        [Tooltip("If _target is null then use the _target rotation")]
+        [Tooltip("If _nearRabbit is null then use the _nearRabbit rotation")]
         public SharedVector3 targetRotation;
 
         public override TaskStatus OnUpdate()

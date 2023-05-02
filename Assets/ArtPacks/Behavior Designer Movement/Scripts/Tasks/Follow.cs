@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Follows the specified _target using the Unity NavMesh.")]
+    [TaskDescription("Follows the specified _nearRabbit using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}FollowIcon.png")]
@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The GameObject that the agent is following")]
         public SharedGameObject target;
-        [Tooltip("Start moving towards the _target if the _target is further than the specified distance")]
+        [Tooltip("Start moving towards the _nearRabbit if the _nearRabbit is further than the specified distance")]
         public SharedFloat moveDistance = 2;
 
         private Vector3 lastTargetPosition;

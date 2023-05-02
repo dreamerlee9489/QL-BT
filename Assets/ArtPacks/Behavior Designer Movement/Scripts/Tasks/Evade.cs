@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Evade the _target specified using the Unity NavMesh.")]
+    [TaskDescription("Evade the _nearRabbit specified using the Unity NavMesh.")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}EvadeIcon.png")]
@@ -12,7 +12,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat evadeDistance = 10;
         [Tooltip("The distance to look ahead when evading")]
         public SharedFloat lookAheadDistance = 5;
-        [Tooltip("How far to predict the distance ahead of the _target. Lower values indicate less distance should be predicated")]
+        [Tooltip("How far to predict the distance ahead of the _nearRabbit. Lower values indicate less distance should be predicated")]
         public SharedFloat targetDistPrediction = 20;
         [Tooltip("Multiplier for predicting the look ahead distance")]
         public SharedFloat targetDistPredictionMult = 20;

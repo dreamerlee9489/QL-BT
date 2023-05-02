@@ -32,10 +32,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             if (_eatCD.Value == 0 && _bestStates.ContainsKey(_state.Value))
-            {
-                _eatCD.Value = 4;
                 return TaskStatus.Success;
-            }
             return TaskStatus.Failure;
         }
 
