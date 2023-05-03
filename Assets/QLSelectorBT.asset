@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: QLSelectorBT
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(869.166,-17.7475433)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorRoot","NodeData":{"Offset":"(-0.8340244,151.797531)"},"ID":1,"Name":"QL
+        Selector Root","Instant":true,"Single[][]qTable":[],"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":3},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorRetreat","NodeData":{"Offset":"(-414.028168,136.519714)"},"ID":2,"Name":"QL
+        Selector Retreat","Instant":true,"Single[][]qTable":[],"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"Both","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceFlee","NodeData":{"Offset":"(-266.093475,137.487244)"},"ID":3,"Name":"QL
+        Sequence Flee","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionFlee","NodeData":{"Offset":"(-115.46846,134.987244)"},"ID":4,"Name":"QL
+        Condition Flee","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(-3.755516,127.529732)"},"ID":5,"Name":"Flee","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceSeekSafe","NodeData":{"Offset":"(0.573150635,143.737335)"},"ID":6,"Name":"QL
+        Sequence Seek Safe","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionSeekSafe","NodeData":{"Offset":"(-107.760162,130.820618)"},"ID":7,"Name":"QL
+        Condition Seek Safe","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(38.0864563,131.477112)"},"ID":8,"Name":"Seek
+        Safe","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorIdle","NodeData":{"Offset":"(4.72136974,149.614929)"},"ID":9,"Name":"QL
+        Selector Idle","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"Both","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorGraze","NodeData":{"Offset":"(-177.785553,257.352966)"},"ID":10,"Name":"QL
+        Selector Graze","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"Both","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceSeekFood","NodeData":{"Offset":"(-167.292084,134.848724)"},"ID":11,"Name":"QL
+        Sequence Seek Food","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionSeekFood","NodeData":{"Offset":"(-128.095886,124.157005)"},"ID":12,"Name":"QL
+        Condition Seek Food","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(30.7180176,128.055969)"},"ID":13,"Name":"Seek
+        Food","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceEat","NodeData":{"Offset":"(56.9227257,134.848724)"},"ID":14,"Name":"QL
+        Sequence Eat","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionEat","NodeData":{"Offset":"(-75.7149658,124.157036)"},"ID":15,"Name":"QL
+        Condition Eat","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(36.2443237,126.740173)"},"ID":16,"Name":"Eat","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorExplore","NodeData":{"Offset":"(207.624634,262.630737)"},"ID":17,"Name":"QL
+        Selector Explore","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceFlock","NodeData":{"Offset":"(-104.048363,125.585625)"},"ID":18,"Name":"QL
+        Sequence Flock","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionFlock","NodeData":{"Offset":"(-49.7624779,121.776)"},"ID":19,"Name":"QL
+        Condition Flock","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(68.0863,121.47699)"},"ID":20,"Name":"Flock","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceWander","NodeData":{"Offset":"(167.380371,135.1094)"},"ID":21,"Name":"QL
+        Sequence Wander","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionWander","NodeData":{"Offset":"(-62.61975,106.776077)"},"ID":22,"Name":"QL
+        Condition Wander","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(65.1917,110.161255)"},"ID":23,"Name":"Wander","Instant":true}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSelectorAttack","NodeData":{"Offset":"(531.110168,147.6308)"},"ID":24,"Name":"QL
+        Selector Attack","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceCharge","NodeData":{"Offset":"(-52.2166443,123.680939)"},"ID":25,"Name":"QL
+        Sequence Charge","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionCharge","NodeData":{"Offset":"(-81.9053955,132.618652)"},"ID":26,"Name":"QL
+        Condition Charge","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(48.08618,132.266541)"},"ID":27,"Name":"Charge","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.QLSequenceAssist","NodeData":{"Offset":"(174.523071,116.538055)"},"ID":28,"Name":"QL
+        Sequence Assist","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.QLConditionAssist","NodeData":{"Offset":"(-17.6201172,128.332886)"},"ID":29,"Name":"QL
+        Condition Assist","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestAction","NodeData":{"Offset":"(104.401978,125.687622)"},"ID":30,"Name":"Assist","Instant":true}]}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"PreviouState","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CurrentState","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Health","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"NeighNum","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFood","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistSafe","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFox","IsShared":true,"Int32mValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.3
