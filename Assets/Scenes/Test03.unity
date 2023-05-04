@@ -897,6 +897,7 @@ GameObject:
   - component: {fileID: 6686656882959272884}
   - component: {fileID: 6686656882959272885}
   - component: {fileID: 6744646731227300250}
+  - component: {fileID: 6744646731227300251}
   - component: {fileID: 6744646731227300249}
   m_Layer: 0
   m_Name: QRabbit
@@ -912,7 +913,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6744646731227300248}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79af2a1d2a113744fa4b21e8cf0f1dd1, type: 3}
   m_Name: 
@@ -938,14 +939,16 @@ MonoBehaviour:
   resetValuesOnRestart: 0
   externalBehavior: {fileID: 11400000, guid: 793612ceb6dee224e81fc6be972db5c4, type: 2}
   mBehaviorSource:
-    behaviorName: Behavior 2
+    behaviorName: Behavior
     behaviorDescription: 
     mTaskData:
       types: []
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Hp","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Tem","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Cnt","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CurrentState","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"PreviouState","IsShared":true,"Int32mValue":0}]}'
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(274.333344,-64.77779)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(4.33334351,115.222214)"},"ID":1,"Name":"Root","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":3},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(-265.099335,130.139557)"},"ID":2,"Name":"Retreat","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionFlee","NodeData":{"Offset":"(-100.666557,139.666565)"},"ID":3,"Name":"Flee","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionSeekSafe","NodeData":{"Offset":"(23.7778053,144.111)"},"ID":4,"Name":"Seek
+        Safe","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(4.90057373,133.4729)"},"ID":5,"Name":"Idle","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(-85.111084,141.888763)"},"ID":6,"Name":"Graze","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionSeekFood","NodeData":{"Offset":"(-109.555519,144.111)"},"ID":7,"Name":"Seek
+        Food","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionEat","NodeData":{"Offset":"(20.44447,136.333221)"},"ID":8,"Name":"Eat","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(107.111115,145.2221)"},"ID":9,"Name":"Explore","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionFlock","NodeData":{"Offset":"(-42.8888855,132.999878)"},"ID":10,"Name":"Flock","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionWander","NodeData":{"Offset":"(87.11116,127.444344)"},"ID":11,"Name":"Wander","Instant":true}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.HrlSelector","NodeData":{"Offset":"(282.678345,134.583923)"},"ID":12,"Name":"Attack","Instant":true,"SharedFloatalpha":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.5},"SharedFloatgamma":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.8},"SharedIntstateNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":1024},"SharedIntactionNum":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":2},"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionCharge","NodeData":{"Offset":"(3.777771,126.333221)"},"ID":13,"Name":"Charge","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.TestActionAssist","NodeData":{"Offset":"(115.999954,126.333221)"},"ID":14,"Name":"Assist","Instant":true}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CurrentState","IsShared":true,"Int32mValue":0}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -957,6 +960,18 @@ MonoBehaviour:
       Version: 1.7.3
   gizmoViewMode: 2
   showBehaviorDesignerGizmo: 1
+--- !u!114 &6744646731227300251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6744646731227300248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd247bdf7dd7a2847946631604ba584f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6744709051599954732
 GameObject:
   m_ObjectHideFlags: 0

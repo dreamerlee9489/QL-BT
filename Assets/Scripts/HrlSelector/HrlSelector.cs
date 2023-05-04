@@ -7,27 +7,27 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks
 {
     [TaskIcon("{SkinColor}UtilitySelectorIcon.png")]
-    public class TestQSelector : Composite, IRewarder
+    public class HrlSelector : Composite, IRewarder
     {
-        protected int currentChildIndex, _prevState;
-        protected float[][] qTable, rTable;
-        protected SharedInt currentState;
+        protected int _currIndex = 0, _prevState;
+        protected float[][] _qTable, _rTable;
         protected TaskStatus executionStatus = TaskStatus.Inactive;
         protected List<int> availableChildren = new();
+        protected SharedInt currentState;
 
         public SharedFloat alpha = 0.5f, gamma = 0.8f;
-        public SharedInt stateNum = 8, actionNum = 2;
+        public SharedInt stateNum = 1024, actionNum = 2;
 
         public override void OnAwake()
         {
-            currentState = Owner.GetVariable("CurrentState") as SharedInt;
-            qTable = new float[stateNum.Value][];
-            rTable = new float[stateNum.Value][];
+            _qTable = new float[stateNum.Value][];
+            _rTable = new float[stateNum.Value][];
             for (int i = 0; i < stateNum.Value; i++)
             {
-                qTable[i] = new float[actionNum.Value];
-                rTable[i] = new float[actionNum.Value];
+                _qTable[i] = new float[actionNum.Value];
+                _rTable[i] = new float[actionNum.Value];
             }
+            currentState = Owner.GetVariable("CurrentState") as SharedInt;
         }
 
         public override void OnStart()
@@ -35,12 +35,12 @@ namespace BehaviorDesigner.Runtime.Tasks
             availableChildren.Clear();
             for (int i = 0; i < children.Count; ++i)
                 availableChildren.Add(i);
-            currentChildIndex = ChooseAction();
+            _currIndex = ChooseAction();
         }
 
         public override int CurrentChildIndex()
         {
-            return currentChildIndex;
+            return _currIndex;
         }
 
         public override void OnChildStarted(int childIndex)
@@ -59,28 +59,27 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (childStatus != TaskStatus.Inactive && childStatus != TaskStatus.Running)
             {
-                UpdateQValue();
+                UpdateQTable();
                 executionStatus = childStatus;
                 if (executionStatus == TaskStatus.Failure)
                 {
                     availableChildren.Remove(childIndex);
-                    currentChildIndex = ChooseAction();
-                }                
+                    _currIndex = ChooseAction();
+                }
             }
         }
 
         public override void OnConditionalAbort(int childIndex)
         {
-            currentChildIndex = childIndex;
+            _currIndex = childIndex;
             executionStatus = TaskStatus.Inactive;
         }
 
         public override void OnEnd()
         {
             executionStatus = TaskStatus.Inactive;
-            currentChildIndex = 0;
-            PrintArray(qTable, $"Q_{FriendlyName}");
-            PrintArray(rTable, $"R_{FriendlyName}");
+            _currIndex = 0;
+            PrintArray(_qTable, FriendlyName);
         }
 
         public override TaskStatus OverrideStatus(TaskStatus status)
@@ -92,41 +91,40 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             return true;
         }
-
+        
         protected int ChooseAction()
         {
             _prevState = currentState.Value;
+            for (int i = 0; i < _rTable[_prevState].Length; i++)
+                _rTable[_prevState][i] = 0;
             return availableChildren[Random.Range(0, availableChildren.Count)];
         }
 
-        protected void UpdateQValue()
+        protected void UpdateQTable()
         {
-            float reward = (children[currentChildIndex] as IRewarder).GetReward();
-            rTable[_prevState][currentChildIndex] = reward;
-            qTable[_prevState][currentChildIndex] = 
-                (1 - alpha.Value) * qTable[_prevState][currentChildIndex] + alpha.Value * (reward + gamma.Value * qTable[currentState.Value].Max());
+            float reward = (children[_currIndex] as IRewarder).GetReward();
+            _rTable[_prevState][_currIndex] = reward;
+            _qTable[_prevState][_currIndex] *= (1 - alpha.Value);
+            _qTable[_prevState][_currIndex] += alpha.Value * (reward + gamma.Value * _qTable[currentState.Value].Max());
+            //Debug.Log($"{FriendlyName}: Q[{_prevState}][{currentChildIndex}]={q}");
         }
 
-        public float GetReward()
-        {
-            float highestReward = float.MinValue;
-            for(int i =0; i < children.Count;i++)
-                highestReward = Mathf.Max(highestReward, (children[i] as IRewarder).GetReward());
-            return highestReward;
-        }
+        public float GetReward() => _rTable[_prevState].Min();
 
         void PrintArray(float[][] arr, string fileName)
-        {
-            StringBuilder builder = new("hp,tem,cnt,");
+        {          
+            StringBuilder builder = new("Health,NeighNum,DistFood,DistSafe,DistFox,");
             for (int i = 0; i < children.Count; i++)
                 builder.Append(children[i].FriendlyName + (i == children.Count - 1 ? "\n" : ","));
             for (int i = 0; i < stateNum.Value; i++)
             {
-                builder.Append($"{(i & 0b100) >> 2},");
-                builder.Append($"{(i & 0b010) >> 1},");
-                builder.Append($"{(i & 0b001)},");
+                builder.Append($"{(i & 0b1100000000) >> 8},");
+                builder.Append($"{(i & 0b0011000000) >> 6},");
+                builder.Append($"{(i & 0b0000110000) >> 4},");
+                builder.Append($"{(i & 0b0000001100) >> 2},");
+                builder.Append($"{(i & 0b0000000011)},");
                 for (int j = 0; j < actionNum.Value; j++)
-                    builder.Append(qTable[i][j] + (j == actionNum.Value - 1 ? "\n" : ","));
+                    builder.Append(arr[i][j] + (j == actionNum.Value - 1 ? "\n" : ","));
             }
             using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}.csv");
             writer.Write(builder.ToString());
