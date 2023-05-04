@@ -220,8 +220,8 @@ int main(int argc, char* argv[]) {
                 if (pair.first == -1)
                     break;
                 double q_max = *std::max_element(Q[pair.first].begin(), Q[pair.first].end());
-                Q[state][pair.second] *= 1 - alpha_max;
-                Q[state][pair.second] += alpha_max * (R[state][pair.second] + gamma * q_max);
+                Q[state][pair.second] *= 1 - alpha;
+                Q[state][pair.second] += alpha * (R[state][pair.second] + gamma * q_max);
                 state = pair.first;
             }
         }

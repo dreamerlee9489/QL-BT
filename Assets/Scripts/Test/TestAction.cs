@@ -1,27 +1,40 @@
+using UnityEngine;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public abstract class TestAction : Action
-	{
+    public abstract class TestAction : Action, IRewarder
+    {
+        protected int _hp, _tem, _cnt;
+        protected float _timer = 0, _cd = 1;
+        protected TaskStatus _status;
         protected SharedInt previouState, currentState;
-        protected SharedInt hp, tem, cnt;
+        protected SharedInt prevHp, prevTem, prevCnt;
+
+        public abstract float GetReward(int state);
 
         public override void OnAwake()
         {
             previouState = Owner.GetVariable("PreviouState") as SharedInt;
             currentState = Owner.GetVariable("CurrentState") as SharedInt;
-            hp = Owner.GetVariable("Hp") as SharedInt;
-            tem = Owner.GetVariable("Tem") as SharedInt;
-            cnt = Owner.GetVariable("Cnt") as SharedInt;
+            prevHp = Owner.GetVariable("Hp") as SharedInt;
+            prevTem = Owner.GetVariable("Tem") as SharedInt;
+            prevCnt = Owner.GetVariable("Cnt") as SharedInt;
         }
 
         public override void OnStart()
         {
             previouState.Value = currentState.Value;
-            hp.Value = (previouState.Value & 0b110000) >> 4;
-            tem.Value = (previouState.Value & 0b001100) >> 2;
-            cnt.Value = (previouState.Value & 0b000011);
         }
 
-        public abstract float GetReward();
+        public override TaskStatus OnUpdate()
+        {
+            _timer += Time.deltaTime;
+            if (_timer > _cd)
+            {
+                _timer = 0;
+                return _status = TaskStatus.Success;
+            }
+            return _status = TaskStatus.Running;
+        }
     }
 }

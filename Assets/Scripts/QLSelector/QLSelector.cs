@@ -82,7 +82,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         void PrintArray(float[][] arr)
         {
-            StringBuilder builder = new("hp,nn,df,ds,de,a1,a2,a3\n");
+            StringBuilder builder = new("prevHp,nn,df,ds,de,a1,a2,a3\n");
             for (int i = 0; i < stateNum.Value; i++)
             {
                 if (arr[i].Max() > 0)

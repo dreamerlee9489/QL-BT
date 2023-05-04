@@ -4,25 +4,24 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class PlayGameAction : TestAction
     {
-        private float timer = 0, cd = 3;
-
-        public override TaskStatus OnUpdate()
+        public override void OnEnd()
         {
-            timer += Time.deltaTime;
-            if (timer > cd)
-            {
-                timer = 0;
-                return TaskStatus.Success;
-            }
-            return TaskStatus.Running;
+            _hp = (previouState.Value & 0b100) >> 2;
+            _hp = _status == TaskStatus.Success ? Mathf.Clamp(_hp - 1, 0, 1) : _hp;
+            _tem = Random.Range(0, 2);
+            _cnt = Random.Range(0, 2);
+            currentState.Value = (_hp << 2) | (_tem << 1) | _cnt;
         }
 
-        public override float GetReward()
+        public override float GetReward(int state)
         {
-            if (hp.Value != 1)
+            _hp = (state & 0b100) >> 2;
+            _tem = (state & 0b010) >> 1;
+            _cnt = (state & 0b001);
+            if (_hp != 1)
                 return -1;
             else
-                return cnt.Value == 0 ? 10 : 0;
+                return _cnt == 0 ? 10 : 0;
         }
     }
 }

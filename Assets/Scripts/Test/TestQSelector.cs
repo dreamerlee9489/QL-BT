@@ -7,22 +7,25 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks
 {
     [TaskIcon("{SkinColor}UtilitySelectorIcon.png")]
-    public abstract class TestQSelector : Composite
+    public class TestQSelector : Composite, IRewarder
     {
-        protected float[][] qTable, rTable;
         protected int currentChildIndex = 0;
-        protected SharedInt previouState, currentState;
+        protected float highestReward;
+        protected bool reevaluating;
+        protected float[][] qTable, rTable;
+        protected float[] rewards;
         protected TaskStatus executionStatus = TaskStatus.Inactive;
+        protected List<int> availableChildren = new();
+        protected SharedInt previouState, currentState;
 
         public SharedFloat alpha = 0.5f, gamma = 0.8f;
         public SharedInt stateNum = 8, actionNum = 2;
-
-        public abstract float GetReward(int state);
 
         public override void OnAwake()
         {
             qTable = new float[stateNum.Value][];
             rTable = new float[stateNum.Value][];
+            rewards = new float[actionNum.Value];
             for (int i = 0; i < stateNum.Value; i++)
             {
                 qTable[i] = new float[actionNum.Value];
@@ -34,7 +37,50 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
+            availableChildren.Clear();
+            for (int i = 0; i < children.Count; ++i)
+            {
+                availableChildren.Add(i);
+                rewards[i] = 0;
+            }
             currentChildIndex = ChooseAction(currentState.Value);
+        }
+
+        public override int CurrentChildIndex()
+        {
+            return currentChildIndex;
+        }
+
+        public override void OnChildStarted(int childIndex)
+        {
+            executionStatus = TaskStatus.Running;
+        }
+
+        public override bool CanExecute()
+        {
+            if (executionStatus == TaskStatus.Success || executionStatus == TaskStatus.Running || reevaluating)
+                return false;
+            return availableChildren.Count > 0;
+        }
+
+        public override void OnChildExecuted(int childIndex, TaskStatus childStatus)
+        {
+            if (childStatus != TaskStatus.Inactive && childStatus != TaskStatus.Running)
+            {
+                UpdateQTable((children[currentChildIndex] as IRewarder).GetReward(previouState.Value));
+                executionStatus = childStatus;
+                if (executionStatus == TaskStatus.Failure)
+                {
+                    availableChildren.Remove(childIndex);
+                    currentChildIndex = ChooseAction(currentState.Value);
+                }                
+            }
+        }
+
+        public override void OnConditionalAbort(int childIndex)
+        {
+            currentChildIndex = childIndex;
+            executionStatus = TaskStatus.Inactive;
         }
 
         public override void OnEnd()
@@ -44,65 +90,56 @@ namespace BehaviorDesigner.Runtime.Tasks
             PrintArray(qTable);
         }
 
-        public override int CurrentChildIndex()
+        public override TaskStatus OverrideStatus(TaskStatus status)
         {
-            return currentChildIndex;
+            return executionStatus;
         }
 
-        public override bool CanExecute()
+        public override bool CanRunParallelChildren()
         {
-            //Debug.Log($"{GetType().Name}: {currentAction}, {executionStatus}");
-            return currentChildIndex < children.Count && executionStatus != TaskStatus.Success;
+            return true;
         }
 
-        public override void OnChildExecuted(TaskStatus childStatus)
+        public float GetReward(int state)
         {
-            UpdateQTable(GetReward(previouState.Value));
-            currentChildIndex = ChooseAction(currentState.Value);
-            executionStatus = childStatus;
-        }
-
-        public override void OnConditionalAbort(int childIndex)
-        {
-            currentChildIndex = childIndex;
-            executionStatus = TaskStatus.Inactive;
-        }
-
-        protected int ChooseAction(int state)
-        {
-            List<int> actions = new();
-            for (int i = 0; i < rTable[state].Length; i++)
-                if (rTable[state][i] >= 0)
-                    actions.Add(i);
-            return actions[Random.Range(0, actions.Count)];
+            highestReward = float.MinValue;
+            for (int i = 0; i < availableChildren.Count; ++i)
+            {
+                float reward = (children[availableChildren[i]] as IRewarder).GetReward(state);
+                if (reward > highestReward)
+                    highestReward = reward;
+            }
+            return highestReward;
         }
 
         protected void UpdateQTable(float reward)
         {
             if (reward < 0)
                 rTable[previouState.Value][currentChildIndex] = reward;
-            float q = (1 - alpha.Value) * qTable[previouState.Value][currentChildIndex]
-                + alpha.Value * (reward + gamma.Value * qTable[currentState.Value].Max());
+            rewards[currentChildIndex] = reward;
+            float q = (1 - alpha.Value) * qTable[previouState.Value][currentChildIndex] + alpha.Value * (reward + gamma.Value * qTable[currentState.Value].Max());
             qTable[previouState.Value][currentChildIndex] = q;
-            //Debug.Log($"{GetType().Name}: Q[{previouState.Value}][{currentAction}]");
+            Debug.Log($"{FriendlyName}: Q[{previouState.Value}][{currentChildIndex}]={q}");
+        }
+
+        protected int ChooseAction(int state)
+        {
+            return availableChildren[Random.Range(0, availableChildren.Count)];
         }
 
         void PrintArray(float[][] arr)
         {
-            StringBuilder builder = new("hp,tem,cnt,a1,a2\n");
+            StringBuilder builder = new("prevHp,prevTem,prevCnt,a1,a2\n");
             for (int i = 0; i < stateNum.Value; i++)
             {
-                if (arr[i].Max() > 0)
-                {
-                    builder.Append($"{(i & 0b110000) >> 4},");
-                    builder.Append($"{(i & 0b001100) >> 2},");
-                    builder.Append($"{(i & 0b000011)},");
-                    for (int j = 0; j < actionNum.Value; j++)
-                        builder.Append(arr[i][j] + ",");
-                    builder.Append("\n");
-                }
+                builder.Append($"{(i & 0b100) >> 2},");
+                builder.Append($"{(i & 0b010) >> 1},");
+                builder.Append($"{(i & 0b001)},");
+                for (int j = 0; j < actionNum.Value; j++)
+                    builder.Append(arr[i][j] + ",");
+                builder.Append("\n");
             }
-            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/QLSelector/{GetType().Name}.csv");
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/QLSelector/{FriendlyName}.csv");
             writer.Write(builder.ToString());
         }
     }
