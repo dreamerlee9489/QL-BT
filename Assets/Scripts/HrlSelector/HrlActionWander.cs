@@ -3,7 +3,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}SequenceIcon.png")]
     public class HrlActionWander : HrlAction
     {
-        public override float GetReward(int state)
+        public override double GetReward(int state)
         {
             if (_hp.Value == 0)
                 return -300;

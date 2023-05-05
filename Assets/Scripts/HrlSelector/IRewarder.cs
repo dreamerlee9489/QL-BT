@@ -2,6 +2,6 @@
 {
     public interface IRewarder
     {
-        public float GetReward(int state);
+        public double GetReward(int state);
     }
 }

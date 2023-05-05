@@ -4,6 +4,13 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class TestActionAssist : TestAction
     {
+        public override TaskStatus OnUpdate()
+        {
+            if (_nn == 2 && _hp > 1 && _de < 2)
+                return TaskStatus.Success;
+            return TaskStatus.Failure;
+        }
+
         public override void OnEnd()
         {
             base.OnEnd();
@@ -15,24 +22,15 @@ namespace BehaviorDesigner.Runtime.Tasks
             _currState.Value = (_hp << 8) | (_nn << 6) | (_df << 4) | (_ds << 2) | _de;
         }
 
-        public override float GenReward()
+        public override double GetReward(int state)
         {
-            _hp = (_prevState & 0b1100000000) >> 8;
-            _nn = (_prevState & 0b0011000000) >> 6;
-            _df = (_prevState & 0b0000110000) >> 4;
-            _ds = (_prevState & 0b0000001100) >> 2;
-            _de = (_prevState & 0b0000000011);
-            if (_hp == 0)
-                return -300;
-            if (_nn == 2 && _hp > 1 && _de < 2)
-                return 10;
-            else
-                return -1;
-        }
-
-        public override float GetReward(int state)
-        {
-            throw new System.NotImplementedException();
+            _hp = (state & 0b1100000000) >> 8;
+            _nn = (state & 0b0011000000) >> 6;
+            _df = (state & 0b0000110000) >> 4;
+            _ds = (state & 0b0000001100) >> 2;
+            _de = (state & 0b0000000011);
+            if (_nn == 2 && _hp > 1 && _de < 2) return 10;
+            return -1;
         }
     }
 }

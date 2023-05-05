@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace App
 {
@@ -8,6 +9,8 @@ namespace App
         private int _hp, _nn, _df, _ds, _de;
         private SharedInt _currentState;
         private BehaviorTree bt;
+
+        public Text alphaTxt, epochTxt, epsilonTxt;
 
         private void Awake()
         {

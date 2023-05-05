@@ -8,7 +8,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected SharedInt _previouState, _currentState;
         protected SharedInt _hp, _nn, _df, _ds, _de;
 
-        public abstract float GetReward(int state);
+        public abstract double GetReward(int state);
 
         public override void OnAwake()
         {

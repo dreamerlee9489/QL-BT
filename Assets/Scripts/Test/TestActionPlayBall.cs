@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class TestActionPlayBall : TestAction
+    public class TestActionPlayBall : TestSimpleAction
     {
         public override TaskStatus OnUpdate()
         {
             if (_hp != 1)
                 return TaskStatus.Failure;
-            return base.OnUpdate();
+            return _status = TaskStatus.Success;
         }
 
         public override void OnEnd()
@@ -25,19 +25,19 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override float GenReward()
         {
             if (_status == TaskStatus.Failure)
-                return -3;
+                return -1;
             else
                 return _cnt == 0 ? 0 : 10;
         }
 
-        public override float GetReward(int state)
+        public override double GetReward(int state)
         {
             _hp = (state & 0b1000) >> 3;
             _tem = (state & 0b0100) >> 2;
             _cnt = (state & 0b0010) >> 1;
             _area = (state & 0b0001);
             if (_hp == 0)
-                return -3;
+                return -1;
             else
                 return _cnt == 0 ? 0 : 10;
         }
