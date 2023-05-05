@@ -102,14 +102,14 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         protected void UpdateQTable()
         {
-            float reward = (children[_currIndex] as IRewarder).GetReward();
+            float reward = (children[_currIndex] as IRewarder).GetReward(_prevState);
             _rTable[_prevState][_currIndex] = reward;
             _qTable[_prevState][_currIndex] *= (1 - alpha.Value);
             _qTable[_prevState][_currIndex] += alpha.Value * (reward + gamma.Value * _qTable[currentState.Value].Max());
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{currentChildIndex}]={q}");
         }
 
-        public float GetReward() => _rTable[_prevState].Min();
+        public float GetReward(int state) => _rTable[_prevState].Min();
 
         void PrintArray(float[][] arr, string fileName)
         {          

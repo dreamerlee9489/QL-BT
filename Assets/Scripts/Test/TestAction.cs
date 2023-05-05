@@ -4,23 +4,28 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public abstract class TestAction : Action, IRewarder
     {
-        protected int _hp, _tem, _cnt, _nn, _df, _ds, _de, _prevState;
+        protected int _hp, _tem, _cnt, _area;
+        protected int _nn, _df, _ds, _de, _prevState;
         protected float _timer = 0, _cd = 1, _reward = 0;
         protected TaskStatus _status;
-        protected SharedInt currentState;
+        protected SharedInt _currState;
 
         public abstract float GenReward();
-        public float GetReward() => _reward;
+        public abstract float GetReward(int state);
 
         public override void OnAwake()
         {
-            currentState = Owner.GetVariable("CurrentState") as SharedInt;
+            _currState = Owner.GetVariable("CurrentState") as SharedInt;
         }
 
         public override void OnStart()
         {
             _reward = 0;
-            _prevState = currentState.Value;
+            _prevState = _currState.Value;
+            _hp = (_prevState & 0b1000) >> 3;
+            _tem = (_prevState & 0b0100) >> 2;
+            _cnt = (_prevState & 0b0010) >> 1;
+            _area = (_prevState & 0b0001);
         }
 
         public override TaskStatus OnUpdate()

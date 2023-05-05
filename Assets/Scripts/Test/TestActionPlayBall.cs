@@ -4,23 +4,40 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class TestActionPlayBall : TestAction
     {
+        public override TaskStatus OnUpdate()
+        {
+            if (_hp != 1)
+                return TaskStatus.Failure;
+            return base.OnUpdate();
+        }
+
         public override void OnEnd()
         {
             base.OnEnd();
-            _hp = (_prevState & 0b100) >> 2;
+            _hp = (_prevState & 0b1000) >> 3;
             _hp = _status == TaskStatus.Success ? Mathf.Clamp(_hp - 1, 0, 1) : _hp;
             _tem = Random.Range(0, 2);
             _cnt = Random.Range(0, 2);
-            currentState.Value = (_hp << 2) | (_tem << 1) | _cnt;
+            _area = Random.Range(0, 2);
+            _currState.Value = (_hp << 3) | (_tem << 2) | (_cnt << 1) | _area;
         }
 
         public override float GenReward()
         {
-            _hp = (_prevState & 0b100) >> 2;
-            _tem = (_prevState & 0b010) >> 1;
-            _cnt = (_prevState & 0b001);
-            if (_hp != 1)
-                return -1;
+            if (_status == TaskStatus.Failure)
+                return -3;
+            else
+                return _cnt == 0 ? 0 : 10;
+        }
+
+        public override float GetReward(int state)
+        {
+            _hp = (state & 0b1000) >> 3;
+            _tem = (state & 0b0100) >> 2;
+            _cnt = (state & 0b0010) >> 1;
+            _area = (state & 0b0001);
+            if (_hp == 0)
+                return -3;
             else
                 return _cnt == 0 ? 0 : 10;
         }

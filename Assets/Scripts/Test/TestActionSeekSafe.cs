@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _ds = 0;
             _df = Mathf.Clamp(_df + Random.Range(-1, 2), 0, 3);
             _nn = Mathf.Clamp(_nn + Random.Range(-1, 2), 0, 3);
-            currentState.Value = (_hp << 8) | (_nn << 6) | (_df << 4) | (_ds << 2) | _de;
+            _currState.Value = (_hp << 8) | (_nn << 6) | (_df << 4) | (_ds << 2) | _de;
         }
 
         public override float GenReward()
@@ -28,6 +28,11 @@ namespace BehaviorDesigner.Runtime.Tasks
                 return -10;
             else
                 return 0;
+        }
+
+        public override float GetReward(int state)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

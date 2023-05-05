@@ -16,7 +16,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected List<int> availableChildren = new();
 
         public SharedFloat alpha = 0.5f, gamma = 0.8f;
-        public SharedInt stateNum = 8, actionNum = 2;
+        public SharedInt stateNum = 16, actionNum = 2;
 
         public override void OnAwake()
         {
@@ -64,7 +64,8 @@ namespace BehaviorDesigner.Runtime.Tasks
                 if (executionStatus == TaskStatus.Failure)
                 {
                     availableChildren.Remove(childIndex);
-                    currentChildIndex = ChooseAction();
+                    if (availableChildren.Count > 0)
+                        currentChildIndex = ChooseAction();
                 }                
             }
         }
@@ -96,35 +97,37 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected int ChooseAction()
         {
             _prevState = currentState.Value;
+            //Debug.Log("cnt=" +  availableChildren.Count);
             return availableChildren[Random.Range(0, availableChildren.Count)];
         }
 
         protected void UpdateQValue()
         {
-            float reward = (children[currentChildIndex] as IRewarder).GetReward();
+            float reward = (children[currentChildIndex] as IRewarder).GetReward(_prevState);
             rTable[_prevState][currentChildIndex] = reward;
-            qTable[_prevState][currentChildIndex] = 
-                (1 - alpha.Value) * qTable[_prevState][currentChildIndex] + alpha.Value * (reward + gamma.Value * qTable[currentState.Value].Max());
+            qTable[_prevState][currentChildIndex] *= 1 - alpha.Value;
+            qTable[_prevState][currentChildIndex] += alpha.Value * (reward + gamma.Value * qTable[currentState.Value].Max());
         }
 
-        public float GetReward()
+        public float GetReward(int state)
         {
             float highestReward = float.MinValue;
             for(int i =0; i < children.Count;i++)
-                highestReward = Mathf.Max(highestReward, (children[i] as IRewarder).GetReward());
+                highestReward = Mathf.Max(highestReward, (children[i] as IRewarder).GetReward(_prevState));
             return highestReward;
         }
 
         void PrintArray(float[][] arr, string fileName)
         {
-            StringBuilder builder = new("hp,tem,cnt,");
+            StringBuilder builder = new("hp,tem,cnt,area,");
             for (int i = 0; i < children.Count; i++)
                 builder.Append(children[i].FriendlyName + (i == children.Count - 1 ? "\n" : ","));
             for (int i = 0; i < stateNum.Value; i++)
             {
-                builder.Append($"{(i & 0b100) >> 2},");
-                builder.Append($"{(i & 0b010) >> 1},");
-                builder.Append($"{(i & 0b001)},");
+                builder.Append($"{(i & 0b1000) >> 3},");
+                builder.Append($"{(i & 0b0100) >> 2},");
+                builder.Append($"{(i & 0b0010) >> 1},");
+                builder.Append($"{(i & 0b0001)},");
                 for (int j = 0; j < actionNum.Value; j++)
                     builder.Append(qTable[i][j] + (j == actionNum.Value - 1 ? "\n" : ","));
             }

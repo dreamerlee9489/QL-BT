@@ -5,7 +5,7 @@ namespace App
 {
 	public class TestHrlController1 : MonoBehaviour
 	{
-        private int _hp, _tem, _cnt;
+        private int _hp, _tem, _cnt, _area;
         private SharedInt _currentState;
         private BehaviorTree bt;
 
@@ -20,7 +20,8 @@ namespace App
             _hp = 1;
             _tem = Random.Range(0, 2);
             _cnt = Random.Range(0, 2);
-            _currentState.Value = (_hp << 2) | (_tem << 1) | _cnt;
+            _area = Random.Range(0, 2);
+            _currentState.Value = (_hp << 3) | (_tem << 2) | (_cnt << 1) | _area;
         }
     }
 }
