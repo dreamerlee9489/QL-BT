@@ -8,7 +8,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnAwake()
         {
-            hp = Owner.GetVariable("Health") as SharedInt;
+            hp = Owner.GetVariable("HealthLevel") as SharedInt;
         }
 
         public override TaskStatus OnUpdate()

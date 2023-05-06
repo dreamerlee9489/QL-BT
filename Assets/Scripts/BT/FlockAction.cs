@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    public class FlockAction : NavMeshGroupMovement
+    public class FlockAction : NavMeshGroupMovement, IRewarder
     {
         public SharedFloat neighborDistance = 30;
         public SharedFloat lookAheadDistance = 20;
@@ -13,6 +13,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         private float waitDuration = 2f;
         private float startTime;
+
+        public double GetReward(int state) => 0;
 
         public override void OnAwake()
         {
@@ -26,7 +28,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
             startTime = Time.time;
-            Owner.GetComponent<RabbitController>().goalText.text = "Flock";
+            //Owner.GetComponent<RabbitController>().goalText.text = "Flock";
         }
 
         public override TaskStatus OnUpdate()
@@ -52,7 +54,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private void DetermineFlockParameters(int index, out Vector3 alignment, out Vector3 cohesion, out Vector3 separation)
@@ -90,6 +92,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             alignmentWeight = 0.4f;
             cohesionWeight = 0.5f;
             separationWeight = 0.6f;
-        }
+        }        
     }
 }

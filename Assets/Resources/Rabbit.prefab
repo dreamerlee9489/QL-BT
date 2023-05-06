@@ -580,8 +580,8 @@ GameObject:
   - component: {fileID: 1580612881020542086}
   - component: {fileID: 1492032006654859754}
   - component: {fileID: 1492032006654859755}
-  - component: {fileID: 1492032006654859752}
   - component: {fileID: 1492032006654859753}
+  - component: {fileID: 1492032006654859752}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Rabbit
@@ -651,6 +651,46 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1492032006654859753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578168905834550214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 1
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 0575a019fbb5385418cfbf1ceda1c74e, type: 2}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearFox","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearFood","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearSafe","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ArriveDist","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ViewDist","IsShared":true,"SinglemValue":30},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"NeighDist","IsShared":true,"SinglemValue":60},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"MoveSpeed","IsShared":true,"SinglemValue":10},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"RunSpeed","IsShared":true,"SinglemValue":14},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AngularSpeed","IsShared":true,"SinglemValue":1200},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Demage","IsShared":true,"Int32mValue":3},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"FleeCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"EatCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HealthLevel","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"NeighNum","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFood","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistSafe","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFox","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"State","IsShared":true,"Int32mValue":0}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.3
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!114 &1492032006654859752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,46 +734,6 @@ MonoBehaviour:
     mPropertyMapping: 
     mPropertyMappingOwner: {fileID: 0}
     mValue: {fileID: 0}
---- !u!114 &1492032006654859753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1578168905834550214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startWhenEnabled: 1
-  asynchronousLoad: 0
-  pauseWhenDisabled: 0
-  restartWhenComplete: 1
-  logTaskChanges: 0
-  group: 0
-  resetValuesOnRestart: 0
-  externalBehavior: {fileID: 11400000, guid: 0575a019fbb5385418cfbf1ceda1c74e, type: 2}
-  mBehaviorSource:
-    behaviorName: Behavior
-    behaviorDescription: 
-    mTaskData:
-      types: []
-      parentIndex: 
-      startIndex: 
-      variableStartIndex: 
-      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearFox","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearFood","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedGameObject","Name":"NearSafe","IsShared":true},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ArriveDist","IsShared":true,"SinglemValue":3},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"ViewDist","IsShared":true,"SinglemValue":30},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"NeighDist","IsShared":true,"SinglemValue":60},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"MoveSpeed","IsShared":true,"SinglemValue":10},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"RunSpeed","IsShared":true,"SinglemValue":14},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AngularSpeed","IsShared":true,"SinglemValue":1200},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"Demage","IsShared":true,"Int32mValue":3},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"FleeCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"EatCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":"AttackCD","IsShared":true,"SinglemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"HealthLevel","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"NeighNum","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFood","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistSafe","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"DistFox","IsShared":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"State","IsShared":true,"Int32mValue":0}]}'
-      fieldSerializationData:
-        typeName: []
-        fieldNameHash: 
-        startIndex: 
-        dataPosition: 
-        unityObjects: []
-        byteData: 
-        byteDataArray: 
-      Version: 1.7.3
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
 --- !u!1 &6995172040050299730
 GameObject:
   m_ObjectHideFlags: 0

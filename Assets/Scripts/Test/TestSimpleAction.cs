@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnAwake()
         {
-            _currState = Owner.GetVariable("CurrentState") as SharedInt;
+            _currState = Owner.GetVariable("State") as SharedInt;
         }
 
         public override void OnStart()

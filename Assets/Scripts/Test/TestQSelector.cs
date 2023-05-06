@@ -75,7 +75,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnAwake()
         {
-            _currState = Owner.GetVariable("CurrentState") as SharedInt;
+            _currState = Owner.GetVariable("State") as SharedInt;
             _qTable = new double[stateNum.Value][];
             _rTable = new double[stateNum.Value][];
             for (int i = 0; i < stateNum.Value; i++)

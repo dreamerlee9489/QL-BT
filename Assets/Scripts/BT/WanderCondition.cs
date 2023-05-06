@@ -1,8 +1,13 @@
+using UnityEngine;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class WanderCondition : Conditional
+    public class WanderCondition : Conditional, IRewarder
     {
+        private double _reward;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnAwake()
         {
@@ -16,7 +21,11 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             if (_distFox.Value < 2 || _neighNum.Value > 1)
+            {
+                _reward = -1;
                 return TaskStatus.Failure;
+            }
+            _reward = 0;
             return TaskStatus.Success;
         }
     }

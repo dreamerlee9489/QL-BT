@@ -4,29 +4,37 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class SeekFoodAction : NavMeshMovement
+    public class SeekFoodAction : NavMeshMovement, IRewarder
     {
+        private double _reward;
+
         public SharedGameObject target;
         public SharedVector3 targetPosition;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnStart()
         {
             base.OnStart();
+            _reward = 0;
             SetDestination(Target());
-            Owner.GetComponent<RabbitController>().goalText.text = "SeekFood";
+            //Owner.GetComponent<RabbitController>().goalText.text = "SeekFood";
         }
 
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())
+            {
+                _reward = 100;
                 return TaskStatus.Success;
+            }
             SetDestination(Target());
             return TaskStatus.Running;
         }
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private Vector3 Target()

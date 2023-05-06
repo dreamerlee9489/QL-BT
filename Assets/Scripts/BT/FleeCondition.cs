@@ -2,10 +2,13 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class FleeCondition : Conditional
+    public class FleeCondition : Conditional, IRewarder
 	{
+        private double _reward;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedFloat _fleeCD;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnAwake()
         {
@@ -19,8 +22,12 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (_fleeCD.Value == 0 && _heathLv.Value < 2 && _distFox.Value < 2 && _distSafe.Value > 1)
+            if (_fleeCD.Value == 0 /*&& _heathLv.Value < 2*/ && _distFox.Value < 2 && _distSafe.Value > 1)
+            {
+                _reward = 0;
                 return TaskStatus.Success;
+            }
+            _reward = -1;
             return TaskStatus.Failure;
         }
     }

@@ -3,11 +3,14 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class ChargeAction : Action
+    public class ChargeAction : Action, IRewarder
     {
+        private double _reward;
         private SharedGameObject _target;
         private SharedFloat _arriveDist, _attackCD;
         private SharedInt _demage;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnAwake()
         {
@@ -19,7 +22,8 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "Charge";
+            _reward = 0;
+            //Owner.GetComponent<RabbitController>().goalText.text = "Charge";
         }
 
         public override TaskStatus OnUpdate()
@@ -33,6 +37,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 if (Vector3.Distance(_target.Value.transform.position, Owner.transform.position) <= _arriveDist.Value)
                 {
+                    _reward += 5;
                     _attackCD = 1;
                     _target.Value.GetComponent<FoxController>().GetDemage(_demage.Value, Owner.GetComponent<RabbitController>());
                     return TaskStatus.Success;
@@ -43,7 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
-        }
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
+        }        
     }
 }

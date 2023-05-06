@@ -15,7 +15,7 @@ namespace App
         private void Awake()
         {
             bt = GetComponent<BehaviorTree>();
-            _currentState = bt.GetVariable("CurrentState") as SharedInt;
+            _currentState = bt.GetVariable("State") as SharedInt;
         }
 
         private void Start()

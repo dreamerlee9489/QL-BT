@@ -3,35 +3,32 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class EatAction : Action
+    public class EatAction : Action, IRewarder
     {
-        private float waitDuration;
-        private float startTime;
-        private float pauseTime;
+        private double _reward;
+        private float _waitDuration, _startTime, _pauseTime;
         private SharedFloat _eatCD;
-        private RabbitController _owner;
 
         public SharedFloat waitTime;
 
-        public override void OnAwake()
-        {
-            _owner = Owner.gameObject.GetComponent<RabbitController>();
-        }
+        public double GetReward(int state) => _reward;
 
         public override void OnStart()
         {
-            startTime = Time.time;
-            waitDuration = waitTime.Value;
+            _reward = 0;
+            _startTime = Time.time;
+            _waitDuration = waitTime.Value;
             _eatCD = Owner.GetVariable("EatCD") as SharedFloat;
-            Owner.GetComponent<RabbitController>().goalText.text = "Eat";
+            //Owner.GetComponent<RabbitController>().goalText.text = "Eat";
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (startTime + waitDuration < Time.time)
+            if (_startTime + _waitDuration < Time.time)
             {
+                _reward = 200;
                 _eatCD.Value = 4;
-                _owner.GetDemage(-30);
+                Owner.GetComponent<RabbitController>().GetDemage(-30);
                 return TaskStatus.Success;
             }
             return TaskStatus.Running;
@@ -39,24 +36,20 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         public override void OnPause(bool paused)
         {
             if (paused)
-            {
-                pauseTime = Time.time;
-            }
+                _pauseTime = Time.time;
             else
-            {
-                startTime += (Time.time - pauseTime);
-            }
+                _startTime += (Time.time - _pauseTime);
         }
 
         public override void OnReset()
         {
             waitTime = 1;
-        }
+        }        
     }
 }

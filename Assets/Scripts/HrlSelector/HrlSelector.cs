@@ -1,4 +1,3 @@
-using App;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,19 +31,74 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OverrideStatus(TaskStatus status) => _childStatus;
 
-        public override bool CanRunParallelChildren() => true;
+        public override bool CanRunParallelChildren() => true;      
+
+        public override void OnAwake()
+        {
+            _currState = Owner.GetVariable("State") as SharedInt;
+            _qTable = new double[stateNum.Value][];
+            _rTable = new double[stateNum.Value][];
+            for (int i = 0; i < stateNum.Value; ++i)
+            {
+                _qTable[i] = new double[actionNum.Value];
+                _rTable[i] = new double[actionNum.Value];
+            }
+            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/Q_{FriendlyName}.csv"))
+            {
+                string[] line;
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/Q_{FriendlyName}.csv");
+                reader.ReadLine();
+                for (int i = 0; i < stateNum.Value; ++i)
+                {
+                    line = reader.ReadLine().Split(',');
+                    for (int j = 0; j < actionNum.Value; j++)
+                        _qTable[i][j] = double.Parse(line[j + 5]);
+                }
+            }
+        }
+
+        public override void OnStart()
+        {
+            _availableIndexs.Clear();
+            for (int i = 0; i < children.Count; ++i)
+                _availableIndexs.Add(i);
+            _currIndex = ChooseAction(_currState.Value, _epsilon);
+        }
+
+        public override void OnEnd()
+        {
+            _currIndex = 0;
+            _childStatus = TaskStatus.Inactive;
+            if (ID == 1)
+            {
+                PrintArray(_qTable, $"Q_{FriendlyName}");
+                for (int i = 0; i < children.Count; i++)
+                {
+                    HrlSelector child = children[i] as HrlSelector;
+                    child.PrintArray(child.Q, $"Q_{child.FriendlyName}");
+                    if (i == 1)
+                    {
+                        foreach (var item in child.children)
+                        {
+                            HrlSelector tmp = item as HrlSelector;
+                            tmp.PrintArray(tmp.Q, $"Q_{tmp.FriendlyName}");
+                        }
+                    }
+                }
+            }
+        }
 
         public override bool CanExecute()
         {
-            ++_epoch;
-            _alpha = alphaMax.Value / (1 + alphaDecay.Value * _epoch);
+            //++_epoch;
+            //_alpha = alphaMax.Value / (1 + alphaDecay.Value * _epoch);
             _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
-            if (ID == 1)
-            {
-                _alphaTxt.text = _alpha.ToString();
-                _epochTxt.text = _epoch.ToString();
-                _epsilonTxt.text = _epsilon.ToString();
-            }
+            //if (ID == 1)
+            //{
+            //    _alphaTxt.text = _alpha.ToString();
+            //    _epochTxt.text = _epoch.ToString();
+            //    _epsilonTxt.text = _epsilon.ToString();
+            //}
 
             //Debug.Log($"{FriendlyName} CanExecute {_availableIndexs.Count}");
             if (_childStatus == TaskStatus.Success || _childStatus == TaskStatus.Running)
@@ -74,55 +128,6 @@ namespace BehaviorDesigner.Runtime.Tasks
             _childStatus = TaskStatus.Inactive;
         }
 
-        public override void OnAwake()
-        {
-            _currState = Owner.GetVariable("CurrentState") as SharedInt;
-            _qTable = new double[stateNum.Value][];
-            _rTable = new double[stateNum.Value][];
-            for (int i = 0; i < stateNum.Value; ++i)
-            {
-                _qTable[i] = new double[actionNum.Value];
-                _rTable[i] = new double[actionNum.Value];
-            }
-            if (ID == 1)
-            {
-                _alphaTxt = Owner.GetComponent<TestHrlController2>().alphaTxt;
-                _epochTxt = Owner.GetComponent<TestHrlController2>().epochTxt;
-                _epsilonTxt = Owner.GetComponent<TestHrlController2>().epsilonTxt;
-            }
-        }
-
-        public override void OnStart()
-        {
-            _availableIndexs.Clear();
-            for (int i = 0; i < children.Count; ++i)
-                _availableIndexs.Add(i);
-            _currIndex = ChooseAction(_currState.Value, _epsilon);
-        }
-
-        public override void OnEnd()
-        {
-            _currIndex = 0;
-            _childStatus = TaskStatus.Inactive;
-            if (ID == 1)
-            {
-                PrintArray(_qTable, $"{FriendlyName}");
-                for (int i = 0; i < children.Count; i++)
-                {
-                    HrlSelector child = children[i] as HrlSelector;
-                    child.PrintArray(child.Q, child.FriendlyName);
-                    if (i == 1)
-                    {
-                        foreach (var item in child.children)
-                        {
-                            HrlSelector tmp = item as HrlSelector;
-                            tmp.PrintArray(tmp.Q, tmp.FriendlyName);
-                        }
-                    }
-                }
-            }
-        }
-
         protected int ChooseAction(int state, double epsilon)
         {
             if (_availableIndexs.Count == 0)
@@ -133,13 +138,13 @@ namespace BehaviorDesigner.Runtime.Tasks
             else
             {
                 double max = _qTable[state].Max();
-                if (max < 0)
-                {
-                    _availableIndexs.Clear();
-                    _currIndex = 0;
-                    _childStatus = TaskStatus.Success;
-                    return -1;
-                }
+                //if (max < 0)
+                //{
+                //    _availableIndexs.Clear();
+                //    _currIndex = 0;
+                //    _childStatus = TaskStatus.Success;
+                //    return -1;
+                //}
                 return System.Array.IndexOf(_qTable[state], max);
             }
         }
@@ -148,8 +153,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             double reward = (children[_currIndex] as IRewarder).GetReward(_prevState);
             _rTable[_prevState][_currIndex] = reward;
-            _qTable[_prevState][_currIndex] *= 1 - _alpha;
-            _qTable[_prevState][_currIndex] += _alpha * (reward + gamma.Value * _qTable[_currState.Value].Max());
+            _qTable[_prevState][_currIndex] *= 0.5;
+            _qTable[_prevState][_currIndex] += 0.5 * (reward + 0.8 * _qTable[_currState.Value].Max());
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{_currIndex}]={_qTable[_prevState][_currIndex]}");
         }
 

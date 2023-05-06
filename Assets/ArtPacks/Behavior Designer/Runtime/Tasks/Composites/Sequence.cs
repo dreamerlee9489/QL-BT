@@ -6,9 +6,9 @@
     public class Sequence : Composite
     {
         // The index of the child that is currently running or is about to run.
-        private int currentChildIndex = 0;
+        protected int currentChildIndex = 0;
         // The task status of the last child ran.
-        private TaskStatus executionStatus = TaskStatus.Inactive;
+        protected TaskStatus executionStatus = TaskStatus.Inactive;
 
         public override int CurrentChildIndex()
         {

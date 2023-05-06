@@ -8,58 +8,32 @@ using UnityEngine.UI;
 
 namespace App
 {
-    public enum HealthLevel { None, Low, Medium, High }
-    public enum NeighbourNum { None, Low, Medium, High }
-    public enum DistanceToPos { Inside, Near, Medium, Far }
-    public enum ActionSpace { Flee, SeekSafe, SeekFood, Eat, Flock, Wander, Charge, Assist }
-
-    public class GameMgr : MonoBehaviour
-    {
+	public class TestMgr : MonoBehaviour
+	{
         private bool _gameOver = false;
-        private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum, _camIdx;
-        private float _avgRabbitHp, _avgFoxHp, _gameTimer, _camTimer;
-        private GameObject _hrlRabbit;
-        private static GameMgr _instance = null;
-        private static List<GameObject> _foods = new(), _safes = new(), _rabbits = new(), _foxs = new();
+        private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum;
+        private float _avgRabbitHp, _avgFoxHp, _gameTimer;
+        private static TestMgr _instance = null;
+        private static List<GameObject> _foods, _safes, _rabbits, _foxs;
 
-        public bool isQL;
         public int roundNum, foxNum, rabbitNum;
         public float floorWidth;
-        public GameObject foxObj, rabbitObj, hrlObj;
+        public GameObject foxObj, rabbitObj;
         public Text roundText, liveRabbitText, safeRabbitText, liveFoxText;
-        public List<List<float>> qTable = new();
 
         public static List<GameObject> Rabbits => _rabbits;
         public static List<GameObject> Foxs => _foxs;
         public static List<GameObject> Foods => _foods;
         public static List<GameObject> Safes => _safes;
-        public static GameMgr Instance => _instance;
+        public static TestMgr Instance => _instance;
 
         private void Awake()
         {
             _instance = this;
-            for (int i = 0; i < 1024; i++)
-                qTable.Add(new List<float>());
-            if (File.Exists(Application.streamingAssetsPath + "/QTable.csv"))
-            {
-                string[] line;
-                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + "/QTable.csv");
-                reader.ReadLine();
-                for (int i = 0; i < 1024; ++i)
-                {
-                    line = reader.ReadLine().Split(',');
-                    for (int j = 0; j < 8; j++)
-                        qTable[i].Add(float.Parse(line[j + 5]));
-                }
-            }
-        }
-
-        private void Start()
-        {            
             _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
             _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
-            Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
-            ResetGame();
+            _rabbits = GameObject.FindGameObjectsWithTag("Rabbit").ToList();
+            _foxs = GameObject.FindGameObjectsWithTag("Fox").ToList();
         }
 
         private void Update()
@@ -67,38 +41,21 @@ namespace App
             if (!_gameOver && _round <= roundNum)
             {
                 _gameTimer += Time.deltaTime;
-                _camTimer += Time.deltaTime;
-                if (_gameTimer >= 200.0f)
-                    RecordGame(isQL, "Time Over");
-                if (_camTimer >= 15.0f)
-                {
-                    _camTimer = 0;
-                    _camIdx = -1;
-                    do _camIdx = Random.Range(0, _rabbits.Count);
-                    while (!_rabbits[_camIdx].activeSelf);
-                }
+                if (_gameTimer >= 90.0f)
+                    RecordGame(true, "Time Over");
             }
-        }
-
-        private void LateUpdate()
-        {
-            if (!_gameOver)
-                Camera.main.transform.position = _rabbits[_camIdx].transform.position + new Vector3(0, 50, 0);
         }
 
         private void ResetGame()
         {
-            for (int i = 0; i < _rabbits.Count; i++)
-                Destroy(_rabbits[i]);
-            for (int i = 0; i < _foxs.Count; i++)
-                Destroy(_foxs[i]);
+            foreach (var rabbit in _rabbits)
+                Destroy(rabbit);
+            foreach (var fox in _foxs)
+                Destroy(fox);
             _rabbits.Clear();
             _foxs.Clear();
             if (++_round <= roundNum)
             {
-                _hrlRabbit = Instantiate(hrlObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
-                _hrlRabbit.name = "HrlRabbit";
-                _rabbits.Add(_hrlRabbit);
                 for (int i = 0; i < rabbitNum; i++)
                 {
                     GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
@@ -111,7 +68,6 @@ namespace App
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }
-                _camIdx = Random.Range(0, rabbitNum);
                 _liveRabbitNum = rabbitNum;
                 _liveFoxNum = foxNum;
                 _safeRabbitNum = 0;
@@ -153,28 +109,28 @@ namespace App
         public void RabbitEnterSafe(NavMeshAgent agent)
         {
             if (++_safeRabbitNum == _rabbits.Count)
-                RecordGame(isQL, "All Rabbits is safe");
-            safeRabbitText.text = _safeRabbitNum.ToString();
+                RecordGame(true, "All Rabbits is safe");
             agent.isStopped = true;
-            agent.GetComponent<RabbitController>().withinSafe = true;
             agent.GetComponent<BehaviorTree>().DisableBehavior();
+            agent.GetComponent<RabbitController>().withinSafe = true;
+            safeRabbitText.text = _safeRabbitNum.ToString();
         }
 
         public void RabbitIsDead(NavMeshAgent agent)
         {
             if (--_liveRabbitNum == 0)
-                RecordGame(isQL, "All Rabbits is dead");
-            liveRabbitText.text = _liveRabbitNum.ToString();
+                RecordGame(true, "All Rabbits is dead");
             agent.isStopped = true;
             agent.enabled = false;
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
+            liveRabbitText.text = _liveRabbitNum.ToString();
         }
 
         public void FoxIsDead(NavMeshAgent agent)
         {
             if (--_liveFoxNum == 0)
-                RecordGame(isQL, "All Foxs is dead");
+                RecordGame(true, "All Foxs is dead");
             agent.isStopped = true;
             agent.enabled = false;
             agent.gameObject.SetActive(false);

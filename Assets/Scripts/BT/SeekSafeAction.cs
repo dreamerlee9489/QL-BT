@@ -4,22 +4,28 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class SeekSafeAction : NavMeshMovement
+    public class SeekSafeAction : NavMeshMovement, IRewarder
     {
+        private double _reward;
+
         public SharedGameObject target;
         public SharedVector3 targetPosition;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnStart()
         {
             base.OnStart();
+            _reward = 0;
             SetDestination(Target());
-            Owner.GetComponent<RabbitController>().goalText.text = "SeekSafe";
+            //Owner.GetComponent<RabbitController>().goalText.text = "SeekSafe";
         }
 
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())
             {
+                _reward = 300;
                 GameMgr.Instance.RabbitEnterSafe(navMeshAgent);
                 return TaskStatus.Success;
             }
@@ -29,7 +35,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private Vector3 Target()

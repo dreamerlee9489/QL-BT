@@ -1,9 +1,12 @@
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class EatCondition : Conditional
+    public class EatCondition : Conditional, IRewarder
     {
+        private double _reward;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedFloat _eatCD;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnAwake()
         {
@@ -15,14 +18,14 @@ namespace BehaviorDesigner.Runtime.Tasks
             _eatCD = Owner.GetVariable("EatCD") as SharedFloat;
         }
 
-
         public override TaskStatus OnUpdate()
         {
             if (_eatCD.Value == 0 && _heathLv.Value < 2 && _distFood.Value == 0)
             {
-                _eatCD.Value = 4;
+                _reward = 0;
                 return TaskStatus.Success;
             }
+            _reward = -1;
             return TaskStatus.Failure;
         }
     }

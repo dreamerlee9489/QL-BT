@@ -1,9 +1,12 @@
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class ChargeCondition : Conditional
+    public class ChargeCondition : Conditional, IRewarder
     {
+        private double _reward;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedGameObject _target;
+
+        public double GetReward(int state) => _reward;
 
         public override void OnAwake()
         {
@@ -18,7 +21,11 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             if (_distFox.Value < 2 && _heathLv.Value > 1 && _neighNum.Value == 3)
+            {
+                _reward = 0;
                 return TaskStatus.Success;
+            }
+            _reward = -1;
             return TaskStatus.Failure;
         }
     }

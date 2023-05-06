@@ -3,56 +3,73 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    public class FleeAction : NavMeshMovement
+    public class FleeAction : NavMeshMovement, IRewarder
     {
+        private bool _hasMoved;
+        private double _reward;
+        private GameObject _target;
+        private SharedFloat _fleeCD;
+
         public SharedFloat fleedDistance;
         public SharedFloat lookAheadDistance;
         public SharedGameObject target;
 
-        private bool hasMoved;
-        private SharedFloat _fleeCD;
-        private GameObject _target;
+        public double GetReward(int state) => _reward;
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            _fleeCD = Owner.GetVariable("FleeCD") as SharedFloat;
+        }
 
         public override void OnStart()
         {
             base.OnStart();
-            hasMoved = false;
+            _reward = 0;
+            _hasMoved = false;
             _target = target.Value;
-            _fleeCD = Owner.GetVariable("FleeCD") as SharedFloat;
+            //Owner.GetComponent<RabbitController>().goalText.text = "Flee";
             SetDestination(Target());
-            Owner.GetComponent<RabbitController>().goalText.text = "Flee";
         }
 
         public override TaskStatus OnUpdate()
         {
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
+                _reward = 20;
                 _fleeCD.Value = 4;
                 return TaskStatus.Success;
             }
-
             if (HasArrived())
             {
-                if (!hasMoved)
+                if (!_hasMoved)
+                {
+                    _reward = -5;
                     return TaskStatus.Failure;
+                }
                 if (!SetDestination(Target()))
+                {
+                    _reward = -5;
                     return TaskStatus.Failure;
-                hasMoved = false;
+                }
+                _hasMoved = false;
             }
             else
             {
                 var velocityMagnitude = Velocity().sqrMagnitude;
-                if (hasMoved && velocityMagnitude <= 0f)
+                if (_hasMoved && velocityMagnitude <= 0f)
+                {
+                    _reward = -5;
                     return TaskStatus.Failure;
-                hasMoved = velocityMagnitude > 0f;
+                }
+                _hasMoved = velocityMagnitude > 0f;
             }
-
             return TaskStatus.Running;
         }
 
         public override void OnEnd()
         {
-            Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().goalText.text = "";
         }
 
         private Vector3 Target()
