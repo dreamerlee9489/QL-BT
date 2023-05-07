@@ -16,12 +16,15 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected SharedInt _currState;
         protected TaskStatus _childStatus = TaskStatus.Inactive;
         protected List<int> _availableIndexs = new();
-        protected Text _alphaTxt, _epochTxt, _epsilonTxt;
+        protected Text _epochTxt, _alphaTxt, _epsilonTxt;
 
-        public SharedInt stateNum = 1024, actionNum = 2, epochNum = 1000000;
+        public SharedInt stateNum = 1024, actionNum = 2, epochNum = 100000;
         public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.00005;
-        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.05, epsilonDecay = 0.99999;
+        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.05, epsilonDecay = 0.9999;
 
+        public int Epoch => _epoch;
+        public double Alpha => _alpha;
+        public double Epsilon => _epsilon;
         public double[][] Q => _qTable;
         public double[][] R => _rTable;
 
@@ -43,22 +46,28 @@ namespace BehaviorDesigner.Runtime.Tasks
                 _qTable[i] = new double[actionNum.Value];
                 _rTable[i] = new double[actionNum.Value];
             }
-            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/Q_{FriendlyName}.csv"))
+            if (FriendlyName == "Root")
             {
-                string[] line;
-                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/Q_{FriendlyName}.csv");
-                reader.ReadLine();
-                for (int i = 0; i < stateNum.Value; ++i)
-                {
-                    line = reader.ReadLine().Split(',');
-                    for (int j = 0; j < actionNum.Value; j++)
-                        _qTable[i][j] = double.Parse(line[j + 5]);
-                }
+                _epochTxt = transform.Find("RootCanvas").Find("EpochTxt").GetComponent<Text>();
+                _alphaTxt = transform.Find("RootCanvas").Find("AlphaTxt").GetComponent<Text>();
+                _epsilonTxt = transform.Find("RootCanvas").Find("EpsilonTxt").GetComponent<Text>();
             }
+            LoadArray($"Q_{FriendlyName}.csv");
+            ReadData($"Data_{FriendlyName}.txt");
         }
 
         public override void OnStart()
         {
+            ++_epoch;
+            _alpha = alphaMax.Value / (1 + alphaDecay.Value * _epoch);
+            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
+            if (ID == 1)
+            {
+                _alphaTxt.text = _alpha.ToString();
+                _epochTxt.text = _epoch.ToString();
+                _epsilonTxt.text = _epsilon.ToString();
+            }
+
             _availableIndexs.Clear();
             for (int i = 0; i < children.Count; ++i)
                 _availableIndexs.Add(i);
@@ -69,19 +78,22 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             _currIndex = 0;
             _childStatus = TaskStatus.Inactive;
-            if (ID == 1)
+            if (FriendlyName == "Root")
             {
-                PrintArray(_qTable, $"Q_{FriendlyName}");
+                PrintArray(_qTable, $"Q_{FriendlyName}.csv");
+                WriteData(this, $"Data_{FriendlyName}.txt");
                 for (int i = 0; i < children.Count; i++)
                 {
                     HrlSelector child = children[i] as HrlSelector;
-                    child.PrintArray(child.Q, $"Q_{child.FriendlyName}");
-                    if (i == 1)
+                    child.PrintArray(child.Q, $"Q_{child.FriendlyName}.csv");
+                    child.WriteData(child, $"Data_{child.FriendlyName}.txt");
+                    if (child.FriendlyName == "Idle")
                     {
                         foreach (var item in child.children)
                         {
                             HrlSelector tmp = item as HrlSelector;
-                            tmp.PrintArray(tmp.Q, $"Q_{tmp.FriendlyName}");
+                            tmp.PrintArray(tmp.Q, $"Q_{tmp.FriendlyName}.csv");
+                            tmp.WriteData(tmp, $"Data_{tmp.FriendlyName}.txt");
                         }
                     }
                 }
@@ -89,18 +101,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         }
 
         public override bool CanExecute()
-        {
-            //++_epoch;
-            //_alpha = alphaMax.Value / (1 + alphaDecay.Value * _epoch);
-            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
-            //if (ID == 1)
-            //{
-            //    _alphaTxt.text = _alpha.ToString();
-            //    _epochTxt.text = _epoch.ToString();
-            //    _epsilonTxt.text = _epsilon.ToString();
-            //}
-
-            //Debug.Log($"{FriendlyName} CanExecute {_availableIndexs.Count}");
+        {          
             if (_childStatus == TaskStatus.Success || _childStatus == TaskStatus.Running)
                 return false;
             return _availableIndexs.Count > 0;
@@ -110,7 +111,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (childStatus != TaskStatus.Inactive && childStatus != TaskStatus.Running)
             {
-                UpdateQTable();
+                UpdateQTable(childIndex);
                 _childStatus = childStatus;
                 if (_childStatus == TaskStatus.Failure)
                 {
@@ -149,12 +150,12 @@ namespace BehaviorDesigner.Runtime.Tasks
             }
         }
 
-        protected void UpdateQTable()
+        protected void UpdateQTable(int action)
         {
-            double reward = (children[_currIndex] as IRewarder).GetReward(_prevState);
-            _rTable[_prevState][_currIndex] = reward;
-            _qTable[_prevState][_currIndex] *= 0.5;
-            _qTable[_prevState][_currIndex] += 0.5 * (reward + 0.8 * _qTable[_currState.Value].Max());
+            double reward = (children[action] as IRewarder).GetReward(_prevState);
+            _rTable[_prevState][action] = reward;
+            _qTable[_prevState][action] *= 1 - _alpha;
+            _qTable[_prevState][action] += _alpha * (reward + gamma.Value * _qTable[_currState.Value].Max());
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{_currIndex}]={_qTable[_prevState][_currIndex]}");
         }
 
@@ -181,8 +182,45 @@ namespace BehaviorDesigner.Runtime.Tasks
                 for (int j = 0; j < actionNum.Value; ++j)
                     builder.Append(arr[i][j] + (j < actionNum.Value - 1 ? "," : "\n"));
             }
-            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}.csv");
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}");
             writer.Write(builder);
+            writer.Flush();
+        }
+
+        void LoadArray(string fileName)
+        {           
+            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/{fileName}"))
+            {
+                string[] line;
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/{fileName}");
+                reader.ReadLine();
+                for (int i = 0; i < stateNum.Value; ++i)
+                {
+                    line = reader.ReadLine().Split(',');
+                    for (int j = 0; j < actionNum.Value; j++)
+                        _qTable[i][j] = double.Parse(line[j + 5]);
+                }
+            }
+        }
+
+        void WriteData(HrlSelector node, string fileName)
+        {
+            string data = $"{node.Epoch},{node.Alpha},{node.Epsilon}";
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}");
+            writer.Write(data);
+            writer.Flush();
+        }
+
+        void ReadData(string fileName)
+        {
+            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/{fileName}"))
+            {
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/{fileName}");
+                string[] line = reader.ReadLine().Split(',');
+                _epoch = int.Parse(line[0]);
+                _alpha = double.Parse(line[1]);
+                _epsilon = double.Parse(line[2]);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mVariableData:
     variableStartIndex: 
-    JSONSerialization: '{"Variables":[]}'
+    JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"RootEpoch","IsShared":true,"IsGlobal":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"RootAlpha","IsShared":true,"IsGlobal":true,"DoublemValue":0.89999997615814209},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"RootEpsilon","IsShared":true,"IsGlobal":true,"DoublemValue":1},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"RetreatEpoch","IsShared":true,"IsGlobal":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"RetreatAlpha","IsShared":true,"IsGlobal":true,"DoublemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"RetreatEpsilon","IsShared":true,"IsGlobal":true,"DoublemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"IdleEpoch","IsShared":true,"IsGlobal":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"IdleAlpha","IsShared":true,"IsGlobal":true,"DoublemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"IdleEpsilon","IsShared":true,"IsGlobal":true,"DoublemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"AttackEpoch","IsShared":true,"IsGlobal":true,"Int32mValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"AttackAlpha","IsShared":true,"IsGlobal":true,"DoublemValue":0},{"Type":"BehaviorDesigner.Runtime.SharedDouble","Name":"AttackEpsilon","IsShared":true,"IsGlobal":true,"DoublemValue":0}]}'
     fieldSerializationData:
       typeName: []
       fieldNameHash: 

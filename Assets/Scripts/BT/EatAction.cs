@@ -19,7 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _startTime = Time.time;
             _waitDuration = waitTime.Value;
             _eatCD = Owner.GetVariable("EatCD") as SharedFloat;
-            //Owner.GetComponent<RabbitController>().goalText.text = "Eat";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "Eat";
         }
 
         public override TaskStatus OnUpdate()
@@ -36,7 +36,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            //Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 
         public override void OnPause(bool paused)

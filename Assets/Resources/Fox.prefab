@@ -387,16 +387,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 100
-  text: {fileID: 5950761699779580127}
-  nearRabbit:
-    mIsShared: 0
-    mIsGlobal: 0
-    mIsDynamic: 0
-    mName: 
-    mToolTip: 
-    mPropertyMapping: 
-    mPropertyMappingOwner: {fileID: 0}
-    mValue: {fileID: 0}
 --- !u!1 &5949597106376456600
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,7 +666,7 @@ GameObject:
   - component: {fileID: 5950761699779580126}
   - component: {fileID: 5950761699779580127}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: HpText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

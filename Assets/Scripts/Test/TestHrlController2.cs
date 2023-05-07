@@ -74,7 +74,7 @@ namespace App
             hpText.text = hp.ToString();
             if (hp == 0)
             {
-                enemy.nearRabbit.Value = null;
+                enemy.NearRabbit.Value = null;
                 GameMgr.Instance.RabbitIsDead(GetComponent<NavMeshAgent>());
             }
         }
@@ -93,7 +93,7 @@ namespace App
         public NeighbourNum GetNeighbourNum()
         {
             int count = 0;
-            foreach (var rabbit in GameMgr.Rabbits)
+            foreach (var rabbit in GameMgr.Instance.Rabbits)
                 if (rabbit != gameObject && rabbit.GetComponent<RabbitController>().CanBeSee()
                     && Vector3.Distance(transform.position, rabbit.transform.position) <= _neighDist.Value)
                     ++count;
@@ -110,7 +110,7 @@ namespace App
         {
             GameObject nearFood = null;
             float distance = float.MaxValue;
-            foreach (var food in GameMgr.Foods)
+            foreach (var food in GameMgr.Instance.Foods)
             {
                 float tmp = Vector3.Distance(food.transform.position, transform.position);
                 if (tmp < distance)
@@ -133,7 +133,7 @@ namespace App
         {
             GameObject nearSafe = null;
             float distance = float.MaxValue;
-            foreach (var safe in GameMgr.Safes)
+            foreach (var safe in GameMgr.Instance.Safes)
             {
                 float tmp = Vector3.Distance(safe.transform.position, transform.position);
                 if (tmp < distance)
@@ -164,7 +164,7 @@ namespace App
             if (_nearFox.Value == null)
             {
                 GameObject nearFox = null;
-                foreach (var fox in GameMgr.Foxs)
+                foreach (var fox in GameMgr.Instance.Foxs)
                 {
                     if (fox.activeSelf)
                     {

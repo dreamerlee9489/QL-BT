@@ -26,11 +26,11 @@ namespace BehaviorDesigner.Runtime.Tasks
                     return TaskStatus.Failure;
                 }
             }
-            for (int i = 0; i < GameMgr.Rabbits.Count; ++i)
+            for (int i = 0; i < GameMgr.Instance.Rabbits.Count; ++i)
             {
-                if (CanSee(GameMgr.Rabbits[i]))
+                if (CanSee(GameMgr.Instance.Rabbits[i]))
                 {
-                    _target.Value = GameMgr.Rabbits[i];
+                    _target.Value = GameMgr.Instance.Rabbits[i];
                     return TaskStatus.Success;
                 }
             }

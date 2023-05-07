@@ -11,18 +11,20 @@ namespace App
         private BehaviorTree _bt;
         private SharedFloat _arriveDist, _viewDist, _neighDist, _fleeCD, _eatCD;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox, _state;
+        private SharedGameObject _nearFood, _nearSafe, _nearFox;
+        private TMP_Text _hpText, _goalText;
 
         public int hp = 100;
         public bool withinSafe = false;
-        public TMP_Text hpText, goalText;
-        public SharedGameObject nearFood, nearSafe, nearFox;
+        public SharedGameObject NearFood => _nearFood;
+        public SharedGameObject NearSafe => _nearSafe;
+        public SharedGameObject NearFox => _nearFox;
+        public TMP_Text HpText => _hpText;
+        public TMP_Text GoalText => _goalText;
 
         private void Awake()
         {
             _bt = GetComponent<BehaviorTree>();
-            nearFox = _bt.GetVariable("NearFox") as SharedGameObject;
-            nearFood = _bt.GetVariable("NearFood") as SharedGameObject;
-            nearSafe = _bt.GetVariable("NearSafe") as SharedGameObject;
             _heathLv = _bt.GetVariable("HealthLevel") as SharedInt;
             _neighNum = _bt.GetVariable("NeighNum") as SharedInt;
             _distFood = _bt.GetVariable("DistFood") as SharedInt;
@@ -34,15 +36,27 @@ namespace App
             _neighDist = _bt.GetVariable("NeighDist") as SharedFloat;
             _fleeCD = _bt.GetVariable("FleeCD") as SharedFloat;
             _eatCD = _bt.GetVariable("EatCD") as SharedFloat;
+            _nearFox = _bt.GetVariable("NearFox") as SharedGameObject;
+            _nearFood = _bt.GetVariable("NearFood") as SharedGameObject;
+            _nearSafe = _bt.GetVariable("NearSafe") as SharedGameObject;
+            _hpText = transform.Find("Canvas").Find("HpText").GetComponent<TMP_Text>();
+            _goalText = transform.Find("Canvas").Find("GoalText").GetComponent<TMP_Text>();
             _bt.DisableBehavior();
         }
 
         private void Start()
         {
-            GetComponent<NavMeshAgent>().isStopped = false;
-            goalText.text = "";
+            _heathLv.Value = (int)GetHealthLevel();
+            _neighNum.Value = (int)GetNeighbourNum();
+            _distFood.Value = (int)GetDistanceToFood();
+            _distSafe.Value = (int)GetDistanceToSafe();
+            _distFox.Value = (int)GetDistanceToFox();
+            _state.Value = 0;
+            _state.Value = (_heathLv.Value << 8) | (_neighNum.Value << 6) | (_distFood.Value << 4) | (_distSafe.Value << 2) | _distFox.Value;
+            _goalText.text = "";
             _bt.RestartWhenComplete = true;
             _bt.EnableBehavior();
+            GetComponent<NavMeshAgent>().isStopped = false;
         }
 
         private void FixedUpdate()
@@ -58,7 +72,11 @@ namespace App
             _distFox.Value = (int)GetDistanceToFox();
             _state.Value = 0;
             _state.Value = (_heathLv.Value << 8) | (_neighNum.Value << 6) | (_distFood.Value << 4) | (_distSafe.Value << 2) | _distFox.Value;
-            hpText.transform.parent.forward = Camera.main.transform.forward;
+        }
+
+        private void LateUpdate()
+        {
+            _hpText.transform.parent.forward = Camera.main.transform.forward;
         }
 
         public bool CanBeSee()
@@ -71,10 +89,10 @@ namespace App
         public void GetDemage(int demage, FoxController enemy = null)
         {
             hp = Math.Max(hp - demage, 0);
-            hpText.text = hp.ToString();
+            _hpText.text = hp.ToString();
             if (hp == 0)
             {
-                enemy.nearRabbit.Value = null;
+                enemy.NearRabbit.Value = null;
                 GameMgr.Instance.RabbitIsDead(GetComponent<NavMeshAgent>());
             }
         }
@@ -93,7 +111,7 @@ namespace App
         public NeighbourNum GetNeighbourNum()
         {
             int count = 0;
-            foreach (var rabbit in GameMgr.Rabbits)
+            foreach (var rabbit in GameMgr.Instance.Rabbits)
                 if (rabbit != gameObject && rabbit.GetComponent<RabbitController>().CanBeSee() 
                     && Vector3.Distance(transform.position, rabbit.transform.position) <= _neighDist.Value)
                     ++count;
@@ -110,7 +128,7 @@ namespace App
         {
             GameObject nearFood = null;
             float distance = float.MaxValue;
-            foreach (var food in GameMgr.Foods)
+            foreach (var food in GameMgr.Instance.Foods)
             {
                 float tmp = Vector3.Distance(food.transform.position, transform.position);
                 if (tmp < distance)
@@ -119,7 +137,7 @@ namespace App
                     distance = tmp;
                 }
             }
-            this.nearFood.Value = distance <= _neighDist.Value ? nearFood : null;
+            this._nearFood.Value = distance <= _neighDist.Value ? nearFood : null;
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;
             else if (distance <= 30)
@@ -133,7 +151,7 @@ namespace App
         {
             GameObject nearSafe = null;
             float distance = float.MaxValue;
-            foreach (var safe in GameMgr.Safes)
+            foreach (var safe in GameMgr.Instance.Safes)
             {
                 float tmp = Vector3.Distance(safe.transform.position, transform.position);
                 if (tmp < distance)
@@ -142,7 +160,7 @@ namespace App
                     distance = tmp;
                 }
             }
-            this.nearSafe.Value = distance <= _neighDist.Value ? nearSafe : null;
+            this._nearSafe.Value = distance <= _neighDist.Value ? nearSafe : null;
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;
             else if (distance <= 50)
@@ -155,16 +173,16 @@ namespace App
         public DistanceToPos GetDistanceToFox()
         {
             float distance = float.MaxValue;
-            if (nearFox.Value != null && nearFox.Value.activeSelf)
+            if (_nearFox.Value != null && _nearFox.Value.activeSelf)
             {
-                distance = Vector3.Distance(nearFox.Value.transform.position, transform.position);
+                distance = Vector3.Distance(_nearFox.Value.transform.position, transform.position);
                 if (distance > _viewDist.Value)
-                    nearFox.Value = null;
+                    _nearFox.Value = null;
             }
-            if (nearFox.Value == null)
+            if (_nearFox.Value == null)
             {
                 GameObject nearFox = null;
-                foreach (var fox in GameMgr.Foxs)
+                foreach (var fox in GameMgr.Instance.Foxs)
                 {
                     if (fox.activeSelf)
                     {
@@ -176,7 +194,7 @@ namespace App
                         }
                     }
                 }
-                this.nearFox.Value = distance <= _viewDist.Value ? nearFox : null;
+                this._nearFox.Value = distance <= _viewDist.Value ? nearFox : null;
             }
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;

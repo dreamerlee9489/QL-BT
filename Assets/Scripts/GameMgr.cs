@@ -18,26 +18,31 @@ namespace App
         private bool _gameOver = false;
         private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum, _camIdx;
         private float _avgRabbitHp, _avgFoxHp, _gameTimer, _camTimer;
+        private Text _roundText, _liveRabbitText, _safeRabbitText, _liveFoxText;
         private GameObject _hrlRabbit;
+        private List<GameObject> _foods = new(), _safes = new(), _rabbits = new(), _foxs = new();
         private static GameMgr _instance = null;
-        private static List<GameObject> _foods = new(), _safes = new(), _rabbits = new(), _foxs = new();
 
         public bool isQL;
         public int roundNum, foxNum, rabbitNum;
-        public float floorWidth;
         public GameObject foxObj, rabbitObj, hrlObj;
-        public Text roundText, liveRabbitText, safeRabbitText, liveFoxText;
         public List<List<float>> qTable = new();
 
-        public static List<GameObject> Rabbits => _rabbits;
-        public static List<GameObject> Foxs => _foxs;
-        public static List<GameObject> Foods => _foods;
-        public static List<GameObject> Safes => _safes;
+        public List<GameObject> Rabbits => _rabbits;
+        public List<GameObject> Foxs => _foxs;
+        public List<GameObject> Foods => _foods;
+        public List<GameObject> Safes => _safes;
         public static GameMgr Instance => _instance;
 
         private void Awake()
         {
             _instance = this;
+            _roundText = transform.Find("Canvas").Find("RoundNum").GetComponent<Text>();
+            _liveRabbitText = transform.Find("Canvas").Find("AliveRabbitNum").GetComponent<Text>();
+            _safeRabbitText = transform.Find("Canvas").Find("SafeRabbitNum").GetComponent<Text>();
+            _liveFoxText = transform.Find("Canvas").Find("AliveFoxNum").GetComponent<Text>();
+            _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
+            _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
             for (int i = 0; i < 1024; i++)
                 qTable.Add(new List<float>());
             if (File.Exists(Application.streamingAssetsPath + "/QTable.csv"))
@@ -55,9 +60,8 @@ namespace App
         }
 
         private void Start()
-        {            
-            _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
-            _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
+        {
+            _camIdx = 0;
             Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
             ResetGame();
         }
@@ -68,9 +72,9 @@ namespace App
             {
                 _gameTimer += Time.deltaTime;
                 _camTimer += Time.deltaTime;
-                if (_gameTimer >= 200.0f)
+                if (_gameTimer >= 90.0f)
                     RecordGame(isQL, "Time Over");
-                if (_camTimer >= 15.0f)
+                if (_hrlRabbit == null && _camTimer >= 15.0f)
                 {
                     _camTimer = 0;
                     _camIdx = -1;
@@ -83,7 +87,8 @@ namespace App
         private void LateUpdate()
         {
             if (!_gameOver)
-                Camera.main.transform.position = _rabbits[_camIdx].transform.position + new Vector3(0, 50, 0);
+                Camera.main.transform.position = new Vector3(0, 50, 0) + 
+                    (_hrlRabbit != null ? _hrlRabbit.transform.position : _rabbits[_camIdx].transform.position);
         }
 
         private void ResetGame()
@@ -96,18 +101,21 @@ namespace App
             _foxs.Clear();
             if (++_round <= roundNum)
             {
-                _hrlRabbit = Instantiate(hrlObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
-                _hrlRabbit.name = "HrlRabbit";
-                _rabbits.Add(_hrlRabbit);
+                if (hrlObj != null)
+                {
+                    _hrlRabbit = Instantiate(hrlObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    _hrlRabbit.name = "HrlRabbit";
+                    _rabbits.Add(_hrlRabbit);
+                }
                 for (int i = 0; i < rabbitNum; i++)
                 {
-                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
+                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
                     rabbit.name = "Rabbit_" + i;
                     _rabbits.Add(rabbit);
                 }
                 for (int i = 0; i < foxNum; i++)
                 {
-                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-floorWidth / 2, floorWidth / 2), 1, Random.Range(-floorWidth / 2, floorWidth / 2)), Quaternion.identity);
+                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }
@@ -118,10 +126,10 @@ namespace App
                 _avgRabbitHp = 0;
                 _avgFoxHp = 0;
                 _gameTimer = 0;
-                roundText.text = _round.ToString();
-                liveRabbitText.text = _liveRabbitNum.ToString();
-                safeRabbitText.text = _safeRabbitNum.ToString();
-                liveFoxText.text = _liveFoxNum.ToString();
+                _roundText.text = _round.ToString();
+                _liveRabbitText.text = _liveRabbitNum.ToString();
+                _safeRabbitText.text = _safeRabbitNum.ToString();
+                _liveFoxText.text = _liveFoxNum.ToString();
                 _gameOver = false;
             }
         }
@@ -154,7 +162,7 @@ namespace App
         {
             if (++_safeRabbitNum == _rabbits.Count)
                 RecordGame(isQL, "All Rabbits is safe");
-            safeRabbitText.text = _safeRabbitNum.ToString();
+            _safeRabbitText.text = _safeRabbitNum.ToString();
             agent.isStopped = true;
             agent.GetComponent<RabbitController>().withinSafe = true;
             agent.GetComponent<BehaviorTree>().DisableBehavior();
@@ -164,7 +172,7 @@ namespace App
         {
             if (--_liveRabbitNum == 0)
                 RecordGame(isQL, "All Rabbits is dead");
-            liveRabbitText.text = _liveRabbitNum.ToString();
+            _liveRabbitText.text = _liveRabbitNum.ToString();
             agent.isStopped = true;
             agent.enabled = false;
             agent.gameObject.SetActive(false);
@@ -179,7 +187,7 @@ namespace App
             agent.enabled = false;
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
-            liveFoxText.text = _liveFoxNum.ToString();
+            _liveFoxText.text = _liveFoxNum.ToString();
         }
     }
 }

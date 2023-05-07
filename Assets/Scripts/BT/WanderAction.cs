@@ -20,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnStart()
         {
             base.OnStart();
-            //Owner.GetComponent<RabbitController>().goalText.text = "Wander";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "Wander";
         }
 
         public override TaskStatus OnUpdate()
@@ -54,7 +54,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override void OnEnd()
         {
-            //Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 
         private bool TrySetTarget()

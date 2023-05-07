@@ -23,7 +23,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnStart()
         {
             _reward = 0;
-            //Owner.GetComponent<RabbitController>().goalText.text = "Assist";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "Assist";
         }
 
         public override TaskStatus OnUpdate()
@@ -48,7 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            //Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
     }
 }

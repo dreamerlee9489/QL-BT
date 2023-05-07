@@ -28,7 +28,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             _reward = 0;
             _hasMoved = false;
             _target = target.Value;
-            //Owner.GetComponent<RabbitController>().goalText.text = "Flee";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "Flee";
             SetDestination(Target());
         }
 
@@ -69,7 +69,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override void OnEnd()
         {
-            //Owner.GetComponent<RabbitController>().goalText.text = "";
+            //Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 
         private Vector3 Target()

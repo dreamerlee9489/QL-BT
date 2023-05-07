@@ -12,7 +12,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityDebug
         [Tooltip("Text format with {0}, {1}, etc")]
         public SharedString textFormat;
 
-        [Tooltip("Is this hpText an error?")]
+        [Tooltip("Is this _hpText an error?")]
         public SharedBool logError;
 
         public SharedVariable arg0;

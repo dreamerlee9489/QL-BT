@@ -26,7 +26,7 @@ namespace BehaviorDesigner.Runtime.Tasks
                 return TaskStatus.Failure;
             }
             _reward = 0;
-            Owner.GetComponent<RabbitController>().goalText.text = "Flock";
+            Owner.GetComponent<RabbitController>().GoalText.text = "Flock";
             return TaskStatus.Success;
         }
     }
