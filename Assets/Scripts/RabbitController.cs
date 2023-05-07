@@ -9,7 +9,7 @@ namespace App
     public class RabbitController : MonoBehaviour
     {
         private BehaviorTree _bt;
-        private SharedFloat _arriveDist, _viewDist, _neighDist, _fleeCD, _eatCD;
+        private SharedFloat _arriveDist, _viewDist, _neighDist, _fleeCD, _eatCD, _attackCD;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox, _state;
         private SharedGameObject _nearFood, _nearSafe, _nearFox;
         private TMP_Text _hpText, _goalText;
@@ -36,6 +36,7 @@ namespace App
             _neighDist = _bt.GetVariable("NeighDist") as SharedFloat;
             _fleeCD = _bt.GetVariable("FleeCD") as SharedFloat;
             _eatCD = _bt.GetVariable("EatCD") as SharedFloat;
+            _attackCD = _bt.GetVariable("AttackCD") as SharedFloat;
             _nearFox = _bt.GetVariable("NearFox") as SharedGameObject;
             _nearFood = _bt.GetVariable("NearFood") as SharedGameObject;
             _nearSafe = _bt.GetVariable("NearSafe") as SharedGameObject;
@@ -65,6 +66,8 @@ namespace App
                 _fleeCD.Value = Math.Max(_fleeCD.Value - Time.deltaTime, 0);
             if (_eatCD.Value > 0)
                 _eatCD.Value = Math.Max(_eatCD.Value - Time.deltaTime, 0);
+            if (_attackCD.Value > 0)
+                _attackCD.Value = Math.Max(_attackCD.Value - Time.deltaTime, 0);
             _heathLv.Value = (int)GetHealthLevel();
             _neighNum.Value = (int)GetNeighbourNum();
             _distFood.Value = (int)GetDistanceToFood();
@@ -81,7 +84,9 @@ namespace App
 
         public bool CanBeSee()
         {
-            if (!gameObject.activeSelf || withinSafe)
+            if (!gameObject.activeSelf)
+                return false;
+            if (_nearSafe.Value != null && Vector3.SqrMagnitude(_nearSafe.Value.transform.position - transform.position) <= 225)
                 return false;
             return true;
         }
@@ -137,12 +142,12 @@ namespace App
                     distance = tmp;
                 }
             }
-            this._nearFood.Value = distance <= _neighDist.Value ? nearFood : null;
+            _nearFood.Value = distance <= _viewDist.Value ? nearFood : null;
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;
-            else if (distance <= 30)
+            else if (distance <= _viewDist.Value)
                 return DistanceToPos.Near;
-            else if (distance <= 60)
+            else if (distance <= _neighDist.Value)
                 return DistanceToPos.Medium;
             return DistanceToPos.Far;
         }
@@ -160,12 +165,12 @@ namespace App
                     distance = tmp;
                 }
             }
-            this._nearSafe.Value = distance <= _neighDist.Value ? nearSafe : null;
+            _nearSafe.Value = distance <= _viewDist.Value ? nearSafe : null;
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;
-            else if (distance <= 50)
+            else if (distance <= _viewDist.Value)
                 return DistanceToPos.Near;
-            else if (distance <= 100)
+            else if (distance <= _neighDist.Value)
                 return DistanceToPos.Medium;
             return DistanceToPos.Far;
         }
@@ -194,7 +199,7 @@ namespace App
                         }
                     }
                 }
-                this._nearFox.Value = distance <= _viewDist.Value ? nearFox : null;
+                _nearFox.Value = distance <= _viewDist.Value ? nearFox : null;
             }
             if (distance <= _arriveDist.Value)
                 return DistanceToPos.Inside;

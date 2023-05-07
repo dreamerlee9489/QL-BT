@@ -18,9 +18,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected List<int> _availableIndexs = new();
         protected Text _epochTxt, _alphaTxt, _epsilonTxt;
 
-        public SharedInt stateNum = 1024, actionNum = 2, epochNum = 100000;
-        public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.00005;
-        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.05, epsilonDecay = 0.9999;
+        public SharedInt stateNum = 1024, actionNum = 2, epochNum = 10000;
+        public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.0005;
+        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.05, epsilonDecay = 0.9995;
 
         public int Epoch => _epoch;
         public double Alpha => _alpha;
@@ -139,13 +139,12 @@ namespace BehaviorDesigner.Runtime.Tasks
             else
             {
                 double max = _qTable[state].Max();
-                //if (max < 0)
-                //{
-                //    _availableIndexs.Clear();
-                //    _currIndex = 0;
-                //    _childStatus = TaskStatus.Success;
-                //    return -1;
-                //}
+                if (max < 0)
+                {
+                    _currIndex = 0;
+                    _childStatus = TaskStatus.Success;
+                    return -1;
+                }
                 return System.Array.IndexOf(_qTable[state], max);
             }
         }

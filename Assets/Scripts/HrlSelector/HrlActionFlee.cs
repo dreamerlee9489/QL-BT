@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    public class FleeAction : NavMeshMovement, IRewarder
+    public class HrlFleeAction : NavMeshMovement, IRewarder
     {
         private bool _hasMoved;
         private double _reward;
-        private GameObject _target;
+        private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedFloat _fleeCD;
+        private GameObject _target;
 
         public SharedFloat fleedDistance;
         public SharedFloat lookAheadDistance;
@@ -19,6 +20,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnAwake()
         {
             base.OnAwake();
+            _heathLv = Owner.GetVariable("HealthLevel") as SharedInt;
+            _neighNum = Owner.GetVariable("NeighNum") as SharedInt;
+            _distFood = Owner.GetVariable("DistFood") as SharedInt;
+            _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
+            _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _fleeCD = Owner.GetVariable("FleeCD") as SharedFloat;
         }
 
@@ -28,12 +34,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             _reward = 0;
             _hasMoved = false;
             _target = target.Value;
-            Owner.GetComponent<RabbitController>().GoalText.text = "Flee";
             SetDestination(Target());
+            Owner.GetComponent<RabbitController>().GoalText.text = "Flee";
+            if (_fleeCD.Value > 0 || _distFox.Value > 1 || _heathLv.Value > 1 || _distSafe.Value < 2)
+                _reward = -1;
         }
 
         public override TaskStatus OnUpdate()
         {
+            if (_fleeCD.Value > 0 || _distFox.Value > 1 || _heathLv.Value > 1 || _distSafe.Value < 2)
+                return TaskStatus.Failure;
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
                 _reward = 20;

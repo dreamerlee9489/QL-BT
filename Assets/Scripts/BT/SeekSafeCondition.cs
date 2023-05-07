@@ -22,13 +22,13 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (_nearSafe.Value != null && _distFox.Value < 2 && _distSafe.Value < 2 && _heathLv.Value < 2)
+            if (_distSafe.Value != 1 || _heathLv.Value > 1 || _distFox.Value > 1)
             {
-                _reward = 0;
-                return TaskStatus.Success;
+                _reward = -1;
+                return TaskStatus.Failure;
             }
-            _reward = -1;
-            return TaskStatus.Failure;
+            _reward = 0;
+            return TaskStatus.Success;
         }
     }
 }

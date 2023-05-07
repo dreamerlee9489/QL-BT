@@ -18,16 +18,23 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
         }
 
+        public override void OnStart()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "Flock";
+            if (_distFox.Value < 2 || _neighNum.Value < 2)
+                _reward = -1;
+        }
+
         public override TaskStatus OnUpdate()
         {
             if (_distFox.Value < 2 || _neighNum.Value < 2)
-            {
-                _reward = -1;
                 return TaskStatus.Failure;
-            }
-            _reward = 0;
-            Owner.GetComponent<RabbitController>().GoalText.text = "Flock";
             return TaskStatus.Success;
+        }
+
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
     }
 }

@@ -28,7 +28,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
             startTime = Time.time;
-            //Owner.GetComponent<RabbitController>().GoalText.text = "Flock";
         }
 
         public override TaskStatus OnUpdate()
@@ -50,11 +49,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 }
             }
             return TaskStatus.Running;
-        }
-
-        public override void OnEnd()
-        {
-            //Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 
         private void DetermineFlockParameters(int index, out Vector3 alignment, out Vector3 cohesion, out Vector3 separation)

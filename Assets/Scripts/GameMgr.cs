@@ -24,6 +24,7 @@ namespace App
         private static GameMgr _instance = null;
 
         public bool isQL;
+        public float floorLen;
         public int roundNum, foxNum, rabbitNum;
         public GameObject foxObj, rabbitObj, hrlObj;
         public List<List<float>> qTable = new();
@@ -72,7 +73,7 @@ namespace App
             {
                 _gameTimer += Time.deltaTime;
                 _camTimer += Time.deltaTime;
-                if (_gameTimer >= 90.0f)
+                if (_gameTimer >= 120.0f)
                     RecordGame(isQL, "Time Over");
                 if (_hrlRabbit == null && _camTimer >= 15.0f)
                 {
@@ -103,19 +104,19 @@ namespace App
             {
                 if (hrlObj != null)
                 {
-                    _hrlRabbit = Instantiate(hrlObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    _hrlRabbit = Instantiate(hrlObj, new Vector3(Random.Range(-floorLen / 2, floorLen / 2), 1, Random.Range(-floorLen / 2, floorLen / 2)), Quaternion.identity);
                     _hrlRabbit.name = "HrlRabbit";
                     _rabbits.Add(_hrlRabbit);
                 }
                 for (int i = 0; i < rabbitNum; i++)
                 {
-                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-floorLen / 2, floorLen / 2), 1, Random.Range(-floorLen / 2, floorLen / 2)), Quaternion.identity);
                     rabbit.name = "Rabbit_" + i;
                     _rabbits.Add(rabbit);
                 }
                 for (int i = 0; i < foxNum; i++)
                 {
-                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-floorLen / 2, floorLen / 2), 1, Random.Range(-floorLen / 2, floorLen / 2)), Quaternion.identity);
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }

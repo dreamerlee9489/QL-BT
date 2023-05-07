@@ -1,9 +1,9 @@
-using App;
+﻿using App;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    public class WanderAction : NavMeshMovement, IRewarder
+    public class HrlWanderAction : NavMeshMovement, IRewarder
     {
         private float pauseTime;
         private float destinationReachTime;
@@ -16,6 +16,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedInt targetRetries = 1;
 
         public double GetReward(int state) => 0;
+
+        public override void OnStart()
+        {
+            base.OnStart();
+            Owner.GetComponent<RabbitController>().GoalText.text = "Wander";
+        }
 
         public override TaskStatus OnUpdate()
         {
@@ -46,6 +52,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return TaskStatus.Running;
         }
 
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
+        }
+
         private bool TrySetTarget()
         {
             var direction = transform.forward;
@@ -74,6 +85,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             minPauseDuration = 0;
             maxPauseDuration = 0;
             targetRetries = 1;
-        }        
+        }
     }
 }

@@ -23,22 +23,19 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnStart()
         {
             _reward = 0;
-            //Owner.GetComponent<RabbitController>().GoalText.text = "Assist";
+            Owner.GetComponent<RabbitController>().GoalText.text = "Assist";
         }
 
         public override TaskStatus OnUpdate()
         {
             if (_attackCD.Value > 0)
-            {
-                _attackCD.Value = Mathf.Max(_attackCD.Value - Time.deltaTime, 0);
                 return TaskStatus.Running;
-            }
             if (_target.Value != null && _target.Value.activeSelf)
             {
                 if (Vector3.Distance(_target.Value.transform.position, Owner.transform.position) <= _arriveDist.Value)
                 {
                     _reward += 3;
-                    _attackCD = 1;
+                    _attackCD.Value = 1;
                     _target.Value.GetComponent<FoxController>().GetDemage(_demage.Value, Owner.GetComponent<RabbitController>());
                     return TaskStatus.Success;
                 }
@@ -48,7 +45,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            //Owner.GetComponent<RabbitController>().GoalText.text = "";
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
     }
 }

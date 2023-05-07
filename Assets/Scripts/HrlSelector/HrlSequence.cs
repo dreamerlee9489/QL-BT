@@ -28,7 +28,6 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public double GetReward(int state)
         {
-            //Debug.Log($"{FriendlyName} get {_totalReward}");
             return _totalReward;
         }
     }

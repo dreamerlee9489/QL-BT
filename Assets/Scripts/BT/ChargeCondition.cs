@@ -18,15 +18,17 @@ namespace BehaviorDesigner.Runtime.Tasks
             _target = Owner.GetVariable("NearFox") as SharedGameObject;
         }
 
+        public override void OnStart()
+        {
+            if (_distFox.Value > 1 || _heathLv.Value != 3)
+                _reward = -1;
+        }
+
         public override TaskStatus OnUpdate()
         {
-            if (_distFox.Value < 2 && _heathLv.Value > 1 && _neighNum.Value == 3)
-            {
-                _reward = 0;
-                return TaskStatus.Success;
-            }
-            _reward = -1;
-            return TaskStatus.Failure;
+            if (_distFox.Value > 1 || _heathLv.Value != 3)
+                return TaskStatus.Failure;
+            return TaskStatus.Success;
         }
     }
 }

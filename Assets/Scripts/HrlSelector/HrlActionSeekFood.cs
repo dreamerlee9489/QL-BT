@@ -4,14 +4,25 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
-    public class SeekFoodAction : NavMeshMovement, IRewarder
+    public class HrlSeekFoodAction : NavMeshMovement, IRewarder
     {
         private double _reward;
+        private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
 
         public SharedGameObject target;
         public SharedVector3 targetPosition;
 
         public double GetReward(int state) => _reward;
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            _heathLv = Owner.GetVariable("HealthLevel") as SharedInt;
+            _neighNum = Owner.GetVariable("NeighNum") as SharedInt;
+            _distFood = Owner.GetVariable("DistFood") as SharedInt;
+            _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
+            _distFox = Owner.GetVariable("DistFox") as SharedInt;
+        }
 
         public override void OnStart()
         {
@@ -19,10 +30,14 @@ namespace BehaviorDesigner.Runtime.Tasks
             _reward = 0;
             SetDestination(Target());
             Owner.GetComponent<RabbitController>().GoalText.text = "SeekFood";
+            if (_distFood.Value != 1 || _heathLv.Value > 2 || _distFox.Value < 2)
+                _reward = -1;
         }
 
         public override TaskStatus OnUpdate()
         {
+            if (_distFood.Value != 1 || _heathLv.Value > 2 || _distFox.Value < 2)
+                return TaskStatus.Failure;
             if (HasArrived())
             {
                 _reward = 100;

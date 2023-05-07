@@ -1,3 +1,4 @@
+using App;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
@@ -18,15 +19,24 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
         }
 
+        public override void OnStart()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "Wander";
+            if (_distFox.Value < 2 || _neighNum.Value > 1)
+                _reward = -1;
+        }
+
         public override TaskStatus OnUpdate()
         {
             if (_distFox.Value < 2 || _neighNum.Value > 1)
-            {
-                _reward = -1;
                 return TaskStatus.Failure;
-            }
-            _reward = 0;
+            
             return TaskStatus.Success;
+        }
+
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
     }
 }
