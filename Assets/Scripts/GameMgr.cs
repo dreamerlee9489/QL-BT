@@ -62,7 +62,6 @@ namespace App
 
         private void Start()
         {
-            _camIdx = 0;
             Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
             ResetGame();
         }
@@ -73,7 +72,7 @@ namespace App
             {
                 _gameTimer += Time.deltaTime;
                 _camTimer += Time.deltaTime;
-                if (_gameTimer >= 120.0f)
+                if (_gameTimer >= 90.0f)
                     RecordGame(isQL, "Time Over");
                 if (_hrlRabbit == null && _camTimer >= 15.0f)
                 {
@@ -120,9 +119,9 @@ namespace App
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }
-                _camIdx = Random.Range(0, rabbitNum);
-                _liveRabbitNum = rabbitNum;
-                _liveFoxNum = foxNum;
+                _camIdx = _hrlRabbit != null ? 0 : Random.Range(0, _rabbits.Count);
+                _liveRabbitNum = _rabbits.Count;
+                _liveFoxNum = _foxs.Count;
                 _safeRabbitNum = 0;
                 _avgRabbitHp = 0;
                 _avgFoxHp = 0;

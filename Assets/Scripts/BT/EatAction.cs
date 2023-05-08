@@ -24,10 +24,11 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (_startTime + _waitDuration < Time.time)
+            if (_eatCD.Value == 0 && _startTime + _waitDuration < Time.time)
             {
                 _reward = 100;
-                Owner.GetComponent<RabbitController>().GetDemage(-30);
+                _eatCD.Value = 4;
+                Owner.GetComponent<RabbitController>().GetDemage(-50);
                 return TaskStatus.Success;
             }
             return TaskStatus.Running;
@@ -35,7 +36,6 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnEnd()
         {
-            _eatCD.Value = 4;
             Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 

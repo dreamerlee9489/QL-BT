@@ -170,8 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isQL: 1
   floorLen: 500
-  roundNum: 100
-  foxNum: 20
+  roundNum: 500
+  foxNum: 0
   rabbitNum: 99
   foxObj: {fileID: 5949500729461695658, guid: c1085ef24b976594aaa75b736d61e7c7, type: 3}
   rabbitObj: {fileID: 8721550787481397727, guid: 7fafd84d49ac36e458d3b35689c5bd44, type: 3}

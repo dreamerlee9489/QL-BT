@@ -51,6 +51,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return TaskStatus.Running;
         }
 
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
+        }
+
         private void DetermineFlockParameters(int index, out Vector3 alignment, out Vector3 cohesion, out Vector3 separation)
         {
             alignment = cohesion = separation = Vector3.zero;

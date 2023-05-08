@@ -36,7 +36,7 @@ namespace App
 
         public void GetDemage(int demage, RabbitController enemy)
         {
-            hp = Math.Max(hp - demage, 0);
+            hp = Math.Clamp(hp - demage, 0, 100);
             _text.text = hp.ToString();
             if (hp == 0)
             {

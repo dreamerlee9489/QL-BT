@@ -20,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (_eatCD.Value > 0 || _distFood.Value != 0 || _heathLv.Value == 3 || _distFox.Value < 2)
+            if (_distFood.Value != 0 || _heathLv.Value == 3 || _distFox.Value < 2)
             {
                 _reward = -1;
                 return TaskStatus.Failure;

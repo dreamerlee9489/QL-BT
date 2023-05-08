@@ -34,9 +34,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override TaskStatus OnUpdate()
         {
+            if (_target == null)
+            {
+                _reward = -1;
+                return TaskStatus.Failure;
+            }
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
                 _reward = 20;
+                _fleeCD.Value = 4;
                 return TaskStatus.Success;
             }
             if (HasArrived())
@@ -68,7 +74,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public override void OnEnd()
         {
-            _fleeCD.Value = 4;
             Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 

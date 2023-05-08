@@ -29,12 +29,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (_distFox.Value < 2 || _neighNum.Value < 2)
                 return TaskStatus.Failure;
+            if (_distFood.Value < 2 && _heathLv.Value == 1)
+                return TaskStatus.Failure;
             return TaskStatus.Success;
-        }
-
-        public override void OnEnd()
-        {
-            Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
     }
 }

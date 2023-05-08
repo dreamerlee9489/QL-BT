@@ -46,6 +46,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             return TaskStatus.Running;
         }
 
+        public override void OnEnd()
+        {
+            Owner.GetComponent<RabbitController>().GoalText.text = "";
+        }
+
         private bool TrySetTarget()
         {
             var direction = transform.forward;
