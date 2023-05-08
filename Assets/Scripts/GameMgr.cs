@@ -72,7 +72,7 @@ namespace App
             {
                 _gameTimer += Time.deltaTime;
                 _camTimer += Time.deltaTime;
-                if (_gameTimer >= 90.0f)
+                if (_gameTimer >= 120.0f)
                     RecordGame(isQL, "Time Over");
                 if (_hrlRabbit == null && _camTimer >= 15.0f)
                 {
@@ -166,6 +166,8 @@ namespace App
             agent.isStopped = true;
             agent.GetComponent<RabbitController>().withinSafe = true;
             agent.GetComponent<BehaviorTree>().DisableBehavior();
+            if (agent.name == "HrlRabbit")
+                ResetGame();
         }
 
         public void RabbitIsDead(NavMeshAgent agent)
@@ -177,6 +179,8 @@ namespace App
             agent.enabled = false;
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
+            if (agent.name == "HrlRabbit")
+                ResetGame();
         }
 
         public void FoxIsDead(NavMeshAgent agent)

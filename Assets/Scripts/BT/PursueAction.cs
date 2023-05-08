@@ -28,7 +28,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Failure;
             if (HasArrived())
             {
-                Owner.transform.LookAt(target.Value.transform);
+                Owner.transform.LookAt(target.Value.transform.position);
                 return TaskStatus.Success;
             }
             SetDestination(Target());

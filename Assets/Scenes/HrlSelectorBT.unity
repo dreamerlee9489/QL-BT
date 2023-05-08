@@ -168,13 +168,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5c2a5b4de95e846865af393802ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isQL: 1
+  isQL: 0
   floorLen: 500
   roundNum: 500
-  foxNum: 0
+  foxNum: 30
   rabbitNum: 99
   foxObj: {fileID: 5949500729461695658, guid: c1085ef24b976594aaa75b736d61e7c7, type: 3}
-  rabbitObj: {fileID: 8721550787481397727, guid: 7fafd84d49ac36e458d3b35689c5bd44, type: 3}
+  rabbitObj: {fileID: 1578168905834550214, guid: 4ed5adcf210afe145835c3e8d70e1186, type: 3}
   hrlObj: {fileID: 2276832323981767748, guid: 8444451bf64c56143bdc7d75bb0944b1, type: 3}
 --- !u!1 &1267867592603977558
 GameObject:

@@ -20,13 +20,13 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
-            if (_distFox.Value > 1 || _neighNum.Value < 1 || _heathLv.Value < 1)
+            if (_distFox.Value > 1 || _neighNum.Value != 3 || _heathLv.Value < 1)
                 _reward = -1;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_distFox.Value > 1 || _neighNum.Value < 1 || _heathLv.Value < 1)
+            if (_distFox.Value > 1 || _neighNum.Value != 3 || _heathLv.Value < 1)
                 return TaskStatus.Failure;
             return TaskStatus.Success;
         }

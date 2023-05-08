@@ -35,7 +35,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if (target.Value == null)
                 return TaskStatus.Failure;
             if (HasArrived()) {
-                Owner.transform.LookAt(target.Value.transform);
+                Owner.transform.LookAt(target.Value.transform.position);
                 return TaskStatus.Success;
             }
             // Target will return the predicated position

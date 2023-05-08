@@ -29,16 +29,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             _hasMoved = false;
             _target = target.Value;
             Owner.GetComponent<RabbitController>().GoalText.text = "Flee";
-            SetDestination(Target());
+            if (_target != null)
+                SetDestination(Target());
         }
 
         public override TaskStatus OnUpdate()
         {
             if (_target == null)
-            {
-                _reward = -1;
                 return TaskStatus.Failure;
-            }
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
                 _reward = 20;

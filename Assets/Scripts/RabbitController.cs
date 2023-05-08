@@ -123,9 +123,9 @@ namespace App
                     ++count;
             if (count < 3)
                 return NeighbourNum.None;
-            else if (count < 5)
+            else if (count < 6)
                 return NeighbourNum.Low;
-            else if (count < 7)
+            else if (count < 9)
                 return NeighbourNum.Medium;
             return NeighbourNum.High;
         }
@@ -185,7 +185,7 @@ namespace App
                 if (distance > _viewDist.Value)
                     _nearFox.Value = null;
             }
-            if (_nearFox.Value == null)
+            else
             {
                 GameObject nearFox = null;
                 foreach (var fox in GameMgr.Instance.Foxs)
