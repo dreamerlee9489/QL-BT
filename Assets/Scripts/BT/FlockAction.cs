@@ -3,50 +3,51 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    public class FlockAction : NavMeshGroupMovement, IRewarder
+    public class FlockAction : NavMeshMovement, IRewarder
     {
-        public SharedFloat neighborDistance = 30;
-        public SharedFloat lookAheadDistance = 20;
-        public SharedFloat alignmentWeight = 0.4f;
-        public SharedFloat cohesionWeight = 0.5f;
-        public SharedFloat separationWeight = 0.6f;
+        private float pauseTime;
+        private float destinationReachTime;
 
-        private float waitDuration = 2f;
-        private float startTime;
+        public SharedFloat minWanderDistance = 20;
+        public SharedFloat maxWanderDistance = 20;
+        public SharedFloat wanderRate = 2;
+        public SharedFloat minPauseDuration = 0;
+        public SharedFloat maxPauseDuration = 0;
+        public SharedInt targetRetries = 1;
 
         public double GetReward() => 0;
-
-        public override void OnAwake()
-        {
-            var temp = GameObject.FindGameObjectsWithTag("Rabbit");
-            agents = new SharedGameObject[temp.Length];
-            for (int i = 0; i < agents.Length; i++)
-                agents[i] = new SharedGameObject() { Value = temp[i] };
-        }
 
         public override void OnStart()
         {
             base.OnStart();
-            startTime = Time.time;
+            Owner.GetComponent<RabbitController>().GoalText.text = "Flock";
         }
 
         public override TaskStatus OnUpdate()
         {
-            for (int i = 0; i < agents.Length; ++i)
+            if (HasArrived())
             {
-                if (agents[i].Value.activeSelf)
+                if (maxPauseDuration.Value > 0)
                 {
-                    Vector3 alignment, cohesion, separation;
-                    DetermineFlockParameters(i, out alignment, out cohesion, out separation);
-                    var velocity = alignment * alignmentWeight.Value + cohesion * cohesionWeight.Value + separation * separationWeight.Value;
-                    if (velocity.magnitude == 0 && startTime + waitDuration < Time.time)
-                        return TaskStatus.Failure;
-                    if (!SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value))
+                    if (destinationReachTime == -1)
                     {
-                        velocity *= -1;
-                        SetDestination(i, transforms[i].position + velocity * lookAheadDistance.Value);
+                        destinationReachTime = Time.time;
+                        pauseTime = Random.Range(minPauseDuration.Value, maxPauseDuration.Value);
+                    }
+                    if (destinationReachTime + pauseTime <= Time.time)
+                    {
+                        if (TrySetTarget())
+                            destinationReachTime = -1;
                     }
                 }
+                else
+                {
+                    TrySetTarget();
+                }
+            }
+            else if (navMeshAgent.velocity.sqrMagnitude == 0)
+            {
+                TrySetTarget();
             }
             return TaskStatus.Running;
         }
@@ -56,41 +57,32 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             Owner.GetComponent<RabbitController>().GoalText.text = "";
         }
 
-        private void DetermineFlockParameters(int index, out Vector3 alignment, out Vector3 cohesion, out Vector3 separation)
+        private bool TrySetTarget()
         {
-            alignment = cohesion = separation = Vector3.zero;
-            int neighborCount = 0;
-            var agentPosition = transforms[index].position;
-            for (int i = 0; i < agents.Length; ++i)
+            var direction = transform.forward;
+            var validDestination = false;
+            var attempts = targetRetries.Value;
+            var destination = transform.position;
+            while (!validDestination && attempts > 0)
             {
-                if (index != i)
-                {
-                    var position = transforms[i].position;
-                    if (Vector3.Magnitude(position - agentPosition) < neighborDistance.Value)
-                    {
-                        alignment += Velocity(i);
-                        cohesion += position;
-                        separation += position - agentPosition;
-                        neighborCount++;
-                    }
-                }
+                direction = direction + Random.insideUnitSphere * wanderRate.Value;
+                destination = transform.position + direction.normalized * Random.Range(minWanderDistance.Value, maxWanderDistance.Value);
+                validDestination = SamplePosition(destination);
+                attempts--;
             }
-
-            if (neighborCount == 0)
-                return;
-            alignment = (alignment / neighborCount).normalized;
-            cohesion = ((cohesion / neighborCount) - agentPosition).normalized;
-            separation = ((separation / neighborCount) * -1).normalized;
+            if (validDestination)
+                SetDestination(destination);
+            return validDestination;
         }
 
         public override void OnReset()
         {
-            base.OnReset();
-            neighborDistance = 100;
-            lookAheadDistance = 5;
-            alignmentWeight = 0.4f;
-            cohesionWeight = 0.5f;
-            separationWeight = 0.6f;
-        }        
+            minWanderDistance = 20;
+            maxWanderDistance = 20;
+            wanderRate = 2;
+            minPauseDuration = 0;
+            maxPauseDuration = 0;
+            targetRetries = 1;
+        }
     }
 }

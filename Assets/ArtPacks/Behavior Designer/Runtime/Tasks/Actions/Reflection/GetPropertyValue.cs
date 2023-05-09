@@ -28,7 +28,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             
             var type = TaskUtility.GetTypeWithinAssembly(componentName.Value);
             if (type == null) {
-                Debug.LogWarning("Unable to get property - type is null");
+                Debug.LogWarning("Unable to get property - btType is null");
                 return TaskStatus.Failure;
             }
 

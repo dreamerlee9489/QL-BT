@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityLight
 {
     [TaskCategory("Unity/Light")]
-    [TaskDescription("Sets the type of the light.")]
+    [TaskDescription("Sets the btType of the light.")]
     public class SetType : Action
     {
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
-        [Tooltip("The type to set")]
+        [Tooltip("The btType to set")]
         public LightType type;
 
         // cache the light component

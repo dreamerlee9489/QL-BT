@@ -30,7 +30,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             var type = TaskUtility.GetTypeWithinAssembly(componentName.Value);
             if (type == null) {
-                Debug.LogWarning("Unable to invoke - type is null");
+                Debug.LogWarning("Unable to invoke - btType is null");
                 return TaskStatus.Failure;
             }
 

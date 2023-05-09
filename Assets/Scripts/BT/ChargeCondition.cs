@@ -1,3 +1,4 @@
+using App;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
@@ -19,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _target = Owner.GetVariable("NearFox") as SharedGameObject;
-            _isHrl = Owner.name == "HrlRabbit";
+            _isHrl = GameMgr.Instance.btType == BtType.HrlSelector;
         }
 
         public override void OnStart()
@@ -32,7 +33,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (_isHrl && (_distFox.Value > 1 || _heathLv.Value < 2))
                 return TaskStatus.Failure;
-            if (!_isHrl && (_distFox.Value > 1 || _neighNum.Value < 1 || _heathLv.Value != 3))
+            if (!_isHrl && (_distFox.Value > 1 || _neighNum.Value < 2 || _heathLv.Value != 3))
                 return TaskStatus.Failure;
             return TaskStatus.Success;
         }

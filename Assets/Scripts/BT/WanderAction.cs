@@ -17,6 +17,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         public double GetReward() => 0;
 
+        public override void OnStart()
+        {
+            base.OnStart();
+            Owner.GetComponent<RabbitController>().GoalText.text = "Wander";
+        }
+
         public override TaskStatus OnUpdate()
         {
             if (HasArrived())

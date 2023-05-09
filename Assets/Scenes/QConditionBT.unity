@@ -1094,17 +1094,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5c2a5b4de95e846865af393802ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isQL: 0
+  btType: 1
   roundNum: 100
   foxNum: 20
   rabbitNum: 100
-  floorWidth: 500
   foxObj: {fileID: 5949500729461695658, guid: c1085ef24b976594aaa75b736d61e7c7, type: 3}
-  rabbitObj: {fileID: 1578168905834550214, guid: 4ed5adcf210afe145835c3e8d70e1186, type: 3}
-  roundText: {fileID: 1143105573}
-  liveRabbitText: {fileID: 991667577}
-  safeRabbitText: {fileID: 1097664007}
-  liveFoxText: {fileID: 823409590}
+  rabbitObj: {fileID: 8721550787481397727, guid: 7fafd84d49ac36e458d3b35689c5bd44, type: 3}
 --- !u!33 &620443263066305287
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _state = Owner.GetVariable("State") as SharedInt;
-            List<List<float>> qTable = GameMgr.Instance.qTable;
+            float[][] qTable = GameMgr.Instance.Q;
             for (int i = 0; i < 1024; ++i)
             {
                 float max = qTable[i].Max();

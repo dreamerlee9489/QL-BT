@@ -18,7 +18,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             base.OnStart();
             _reward = 0;
             SetDestination(Target());
-            Owner.GetComponent<RabbitController>().GoalText.text = "SeekFood";
+            Owner.GetComponent<RabbitController>().GoalText.text = "Forage";
         }
 
         public override TaskStatus OnUpdate()

@@ -15,7 +15,6 @@ namespace App
         private TMP_Text _hpText, _goalText;
 
         public int hp = 100;
-        public bool withinSafe = false;
         public SharedGameObject NearFood => _nearFood;
         public SharedGameObject NearSafe => _nearSafe;
         public SharedGameObject NearFox => _nearFox;
@@ -47,6 +46,9 @@ namespace App
 
         private void Start()
         {
+            GetComponent<NavMeshAgent>().isStopped = false;
+            _hpText.text = hp.ToString();
+            _goalText.text = "";
             _heathLv.Value = (int)GetHealthLevel();
             _neighNum.Value = (int)GetNeighbourNum();
             _distFood.Value = (int)GetDistanceToFood();
@@ -54,11 +56,8 @@ namespace App
             _distFox.Value = (int)GetDistanceToFox();
             _state.Value = 0;
             _state.Value = (_heathLv.Value << 8) | (_neighNum.Value << 6) | (_distFood.Value << 4) | (_distSafe.Value << 2) | _distFox.Value;
-            _hpText.text = hp.ToString();
-            _goalText.text = "";
             _bt.RestartWhenComplete = true;
             _bt.EnableBehavior();
-            GetComponent<NavMeshAgent>().isStopped = false;
         }
 
         private void FixedUpdate()

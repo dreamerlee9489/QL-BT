@@ -16,7 +16,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody
         public SharedFloat explosionRadius;
         [Tooltip("Applies the force as if it was applied from beneath the object")]
         public float upwardsModifier = 0;
-        [Tooltip("The type of force")]
+        [Tooltip("The btType of force")]
         public ForceMode forceMode = ForceMode.Force;
 
         // cache the rigidbody component

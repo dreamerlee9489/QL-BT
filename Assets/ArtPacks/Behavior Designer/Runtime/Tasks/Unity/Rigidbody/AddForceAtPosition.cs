@@ -12,7 +12,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody
         public SharedVector3 force;
         [Tooltip("The position of the force")]
         public SharedVector3 position;
-        [Tooltip("The type of force")]
+        [Tooltip("The btType of force")]
         public ForceMode forceMode = ForceMode.Force;
 
         // cache the rigidbody component

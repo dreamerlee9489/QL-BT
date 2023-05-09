@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody
         public SharedGameObject targetGameObject;
         [Tooltip("The amount of force to apply")]
         public SharedVector3 force;
-        [Tooltip("The type of force")]
+        [Tooltip("The btType of force")]
         public ForceMode forceMode = ForceMode.Force;
 
         // cache the rigidbody component

@@ -16,7 +16,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected SharedInt _currState;
         protected TaskStatus _childStatus = TaskStatus.Inactive;
         protected List<int> _availableIndexs = new();
-        protected Text _epochTxt, _alphaTxt, _epsilonTxt;
 
         public SharedInt stateNum = 1024, actionNum = 2;
         public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.0001;
@@ -46,12 +45,6 @@ namespace BehaviorDesigner.Runtime.Tasks
                 _qTable[i] = new double[actionNum.Value];
                 _rTable[i] = new double[actionNum.Value];
             }
-            if (FriendlyName == "Root")
-            {
-                _epochTxt = transform.Find("RootCanvas").Find("EpochTxt").GetComponent<Text>();
-                _alphaTxt = transform.Find("RootCanvas").Find("AlphaTxt").GetComponent<Text>();
-                _epsilonTxt = transform.Find("RootCanvas").Find("EpsilonTxt").GetComponent<Text>();
-            }
             LoadArray($"Q_{FriendlyName}.csv");
             ReadData($"Data_{FriendlyName}.txt");
         }
@@ -61,12 +54,6 @@ namespace BehaviorDesigner.Runtime.Tasks
             ++_epoch;
             _alpha = alphaMax.Value / (1.0 + alphaDecay.Value * _epoch);
             _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
-            if (ID == 1)
-            {
-                _alphaTxt.text = _alpha.ToString();
-                _epochTxt.text = _epoch.ToString();
-                _epsilonTxt.text = _epsilon.ToString();
-            }
 
             _highestReward = double.MinValue;
             _availableIndexs.Clear();
@@ -79,26 +66,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             _currIndex = 0;
             _childStatus = TaskStatus.Inactive;
-            if (FriendlyName == "Root")
-            {
-                PrintArray(_qTable, $"Q_{FriendlyName}.csv");
-                WriteData(this, $"Data_{FriendlyName}.txt");
-                for (int i = 0; i < children.Count; i++)
-                {
-                    HrlSelector child = children[i] as HrlSelector;
-                    child.PrintArray(child.Q, $"Q_{child.FriendlyName}.csv");
-                    child.WriteData(child, $"Data_{child.FriendlyName}.txt");
-                    if (child.FriendlyName == "Idle")
-                    {
-                        foreach (var item in child.children)
-                        {
-                            HrlSelector tmp = item as HrlSelector;
-                            tmp.PrintArray(tmp.Q, $"Q_{tmp.FriendlyName}.csv");
-                            tmp.WriteData(tmp, $"Data_{tmp.FriendlyName}.txt");
-                        }
-                    }
-                }
-            }
         }
 
         public override bool CanExecute()

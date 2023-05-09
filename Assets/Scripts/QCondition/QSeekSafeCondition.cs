@@ -20,11 +20,11 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _state = Owner.GetVariable("State") as SharedInt;
             _target = Owner.GetVariable("NearSafe") as SharedGameObject;
-            List<List<float>> qTable = GameMgr.Instance.qTable;
+            float[][] qTable = GameMgr.Instance.Q;
             for (int i = 0; i < 1024; ++i)
             {
                 float max = qTable[i].Max();
-                if (max > 0 && max == qTable[i][(int)ActionSpace.SeekSafe])
+                if (max == qTable[i][(int)ActionSpace.SeekSafe])
                     _bestStates.Add(i, qTable[i][(int)ActionSpace.SeekSafe]);
             }
         }

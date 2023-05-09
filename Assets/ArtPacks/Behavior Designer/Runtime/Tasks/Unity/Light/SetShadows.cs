@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityLight
 {
     [TaskCategory("Unity/Light")]
-    [TaskDescription("Sets the shadow type of the light.")]
+    [TaskDescription("Sets the shadow btType of the light.")]
     public class SetShadows : Action
     {
         [Tooltip("The GameObject that the task operates on. If null the task GameObject is used.")]
         public SharedGameObject targetGameObject;
-        [Tooltip("The shadow type to set")]
+        [Tooltip("The shadow btType to set")]
         public LightShadows shadows;
 
         // cache the light component

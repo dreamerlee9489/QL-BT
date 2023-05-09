@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody
         public SharedGameObject targetGameObject;
         [Tooltip("The amount of torque to apply")]
         public SharedVector3 torque;
-        [Tooltip("The type of torque")]
+        [Tooltip("The btType of torque")]
         public ForceMode forceMode = ForceMode.Force;
 
         // cache the rigidbody component

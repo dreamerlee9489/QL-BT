@@ -13,7 +13,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnAwake()
         {
             _state = Owner.GetVariable("State") as SharedInt;
-            List<List<float>> qTable = GameMgr.Instance.qTable;
+            float[][] qTable = GameMgr.Instance.Q;
             for (int i = 0; i < 1024; ++i)
             {
                 float max = qTable[i].Max();

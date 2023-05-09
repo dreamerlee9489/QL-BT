@@ -21,7 +21,6 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
-            Owner.GetComponent<RabbitController>().GoalText.text = "Wander";
             if (_distFox.Value < 2 || _neighNum.Value > 1)
                 _reward = -1;
         }
