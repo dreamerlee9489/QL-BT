@@ -39,8 +39,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Failure;
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
-                _reward = 10;
-                _fleeCD.Value = 4;
+                _reward = 20;
+                _fleeCD.Value = 8;
                 return TaskStatus.Success;
             }
             if (HasArrived())
