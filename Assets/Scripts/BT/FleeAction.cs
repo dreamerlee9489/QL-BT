@@ -14,7 +14,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat lookAheadDistance;
         public SharedGameObject target;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnAwake()
         {
@@ -39,7 +39,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Failure;
             if (Vector3.Magnitude(transform.position - _target.transform.position) > fleedDistance.Value)
             {
-                _reward = 20;
+                _reward = 10;
                 _fleeCD.Value = 4;
                 return TaskStatus.Success;
             }

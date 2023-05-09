@@ -6,11 +6,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     public class PursueAction : NavMeshMovement, IRewarder
     {
         private Vector3 targetPosition;
-        private int _hp, _nn, _df, _ds, _de, _prevState;
 
         public SharedFloat targetDistPrediction = 20;
         public SharedFloat targetDistPredictionMult = 20;
-        public SharedGameObject target;        
+        public SharedGameObject target;
+
+        public double GetReward() => 0;
 
         public override void OnStart()
         {
@@ -58,16 +59,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             targetDistPrediction = 20;
             targetDistPredictionMult = 20;
             target = null;
-        }
-
-        public double GetReward(int state)
-        {
-            _hp = (state & 0b1100000000) >> 8;
-            _nn = (state & 0b0011000000) >> 6;
-            _df = (state & 0b0000110000) >> 4;
-            _ds = (state & 0b0000001100) >> 2;
-            _de = (state & 0b0000000011);
-            return 0;
-        }
+        }       
     }
 }

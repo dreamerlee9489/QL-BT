@@ -9,7 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedGameObject _target;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnAwake()
         {
@@ -24,13 +24,13 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnStart()
         {
-            if (_isHrl && (_distFox.Value > 1 || _heathLv.Value != 3))
+            if (_isHrl && (_distFox.Value > 1 || _heathLv.Value < 2))
                 _reward = -1;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_isHrl && (_distFox.Value > 1 || _heathLv.Value != 3))
+            if (_isHrl && (_distFox.Value > 1 || _heathLv.Value < 2))
                 return TaskStatus.Failure;
             if (!_isHrl && (_distFox.Value > 1 || _neighNum.Value < 1 || _heathLv.Value != 3))
                 return TaskStatus.Failure;

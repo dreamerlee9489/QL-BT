@@ -7,7 +7,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected SharedInt _currState;
 
         public abstract float GenReward();
-        public abstract double GetReward(int state);
+        public abstract double GetReward();
 
         public override void OnAwake()
         {

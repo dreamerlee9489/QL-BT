@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedFloat _eatCD;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnAwake()
         {
@@ -20,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (_distFood.Value != 0 || _heathLv.Value == 3 || _distFox.Value < 2)
+            if (_distFood.Value != 0 || _heathLv.Value > 1 || _distFox.Value < 2)
             {
                 _reward = -1;
                 return TaskStatus.Failure;

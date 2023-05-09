@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}UtilitySelectorIcon.png")]
     public class HrlSelector : Composite, IRewarder
     {
-        protected int _epoch, _currIndex, _prevState;
+        protected int _epoch, _currIndex, _prevState, _nextState;
         protected double _highestReward, _alpha, _epsilon;
         protected double[][] _qTable, _rTable;
         protected SharedInt _currState;
@@ -18,9 +18,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected List<int> _availableIndexs = new();
         protected Text _epochTxt, _alphaTxt, _epsilonTxt;
 
-        public SharedInt stateNum = 1024, actionNum = 2, epochNum = 100000;
-        public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.00005;
-        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.1, epsilonDecay = 0.9999;
+        public SharedInt stateNum = 1024, actionNum = 2;
+        public SharedDouble gamma = 0.9, alphaMax = 0.9, alphaDecay = 0.0001;
+        public SharedDouble epsilonMax = 1.0, epsilonMin = 0.05, epsilonDecay = 0.9999;
 
         public int Epoch => _epoch;
         public double Alpha => _alpha;
@@ -68,6 +68,7 @@ namespace BehaviorDesigner.Runtime.Tasks
                 _epsilonTxt.text = _epsilon.ToString();
             }
 
+            _highestReward = double.MinValue;
             _availableIndexs.Clear();
             for (int i = 0; i < children.Count; ++i)
                 _availableIndexs.Add(i);
@@ -111,8 +112,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (childStatus != TaskStatus.Inactive && childStatus != TaskStatus.Running)
             {
-                UpdateQTable(childIndex);
+                _nextState = _currState.Value;
                 _childStatus = childStatus;
+                UpdateQTable(childIndex);
                 if (_childStatus == TaskStatus.Failure)
                 {
                     _availableIndexs.Remove(childIndex);
@@ -139,7 +141,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             else
             {
                 double max = _qTable[state].Max();
-                if (max < -10)
+                if (max < -5)
                 {
                     _currIndex = 0;
                     _childStatus = TaskStatus.Success;
@@ -151,20 +153,15 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         protected void UpdateQTable(int action)
         {
-            double reward = (children[action] as IRewarder).GetReward(_prevState);
+            double reward = (children[action] as IRewarder).GetReward();
             _rTable[_prevState][action] = reward;
             _qTable[_prevState][action] *= 1 - _alpha;
-            _qTable[_prevState][action] += _alpha * (reward + gamma.Value * _qTable[_currState.Value].Max());
+            _qTable[_prevState][action] += _alpha * (reward + gamma.Value * _qTable[_nextState].Max());
+            _highestReward = System.Math.Max(_highestReward, reward);
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{_currIndex}]={_qTable[_prevState][_currIndex]}");
         }
 
-        public double GetReward(int state)
-        {
-            _highestReward = double.MinValue;
-            for (int i = 0; i < children.Count; ++i)
-                _highestReward = System.Math.Max(_highestReward, (children[i] as IRewarder).GetReward(_prevState));
-            return _highestReward;
-        }
+        public double GetReward() => _highestReward;
 
         void PrintArray(double[][] arr, string fileName)
         {

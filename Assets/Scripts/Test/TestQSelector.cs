@@ -137,18 +137,18 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         protected void UpdateQValue()
         {
-            double reward = (children[_currIndex] as IRewarder).GetReward(_prevState);
+            double reward = (children[_currIndex] as IRewarder).GetReward();
             _rTable[_prevState][_currIndex] = reward;
             _qTable[_prevState][_currIndex] *= 1 - _alpha;
             _qTable[_prevState][_currIndex] += _alpha * (reward + gamma.Value * _qTable[_currState.Value].Max());
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{_currIndex}]={_qTable[_prevState][_currIndex]}");
         }
 
-        public double GetReward(int state)
+        public double GetReward()
         {
             _highestReward = double.MinValue;
             for (int i = 0; i < children.Count; i++)
-                _highestReward = System.Math.Max(_highestReward, (children[i] as IRewarder).GetReward(_prevState));
+                _highestReward = System.Math.Max(_highestReward, (children[i] as IRewarder).GetReward());
             return _highestReward;
         }
 

@@ -15,7 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat maxPauseDuration = 0;
         public SharedInt targetRetries = 1;
 
-        public double GetReward(int state) => 0;
+        public double GetReward() => 0;
 
         public override TaskStatus OnUpdate()
         {

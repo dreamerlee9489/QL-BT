@@ -14,7 +14,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         private float waitDuration = 2f;
         private float startTime;
 
-        public double GetReward(int state) => 0;
+        public double GetReward() => 0;
 
         public override void OnAwake()
         {

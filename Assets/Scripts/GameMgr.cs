@@ -167,7 +167,10 @@ namespace App
             agent.GetComponent<RabbitController>().withinSafe = true;
             agent.GetComponent<BehaviorTree>().DisableBehavior();
             if (agent.name == "HrlRabbit")
-                ResetGame();
+            {
+                agent.gameObject.SetActive(false);
+                Invoke(nameof(ResetGame), 1);
+            }
         }
 
         public void RabbitIsDead(NavMeshAgent agent)
@@ -180,7 +183,7 @@ namespace App
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
             if (agent.name == "HrlRabbit")
-                ResetGame();
+                Invoke(nameof(ResetGame), 1);
         }
 
         public void FoxIsDead(NavMeshAgent agent)

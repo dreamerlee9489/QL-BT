@@ -30,12 +30,8 @@ namespace BehaviorDesigner.Runtime.Tasks
                 return _cnt == 0 ? 10 : 0;
         }
 
-        public override double GetReward(int state)
+        public override double GetReward()
         {
-            _hp = (state & 0b1000) >> 3;
-            _tem = (state & 0b0100) >> 2;
-            _cnt = (state & 0b0010) >> 1;
-            _area = (state & 0b0001);
             if (_hp == 0)
                 return -1;
             else

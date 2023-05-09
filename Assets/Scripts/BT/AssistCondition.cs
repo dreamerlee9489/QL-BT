@@ -6,7 +6,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox;
         private SharedGameObject _target;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnAwake()
         {

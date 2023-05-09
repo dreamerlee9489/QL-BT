@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         private SharedFloat _arriveDist, _attackCD;
         private SharedGameObject _target;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnAwake()
         {

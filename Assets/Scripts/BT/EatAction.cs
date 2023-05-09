@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public SharedFloat waitTime;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnStart()
         {

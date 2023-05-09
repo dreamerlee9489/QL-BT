@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public SharedGameObject target;
         public SharedVector3 targetPosition;
 
-        public double GetReward(int state) => _reward;
+        public double GetReward() => _reward;
 
         public override void OnStart()
         {
