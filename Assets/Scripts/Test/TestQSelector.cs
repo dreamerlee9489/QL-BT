@@ -166,7 +166,7 @@ namespace BehaviorDesigner.Runtime.Tasks
                 for (int j = 0; j < actionNum.Value; j++)
                     builder.Append(_qTable[i][j] + (j == actionNum.Value - 1 ? "\n" : ","));
             }
-            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}.csv");
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HRL/{fileName}.csv");
             writer.Write(builder.ToString());
         }
     }

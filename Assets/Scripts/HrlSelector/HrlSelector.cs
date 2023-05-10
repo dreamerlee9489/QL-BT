@@ -145,17 +145,17 @@ namespace BehaviorDesigner.Runtime.Tasks
                 for (int j = 0; j < actionNum.Value; ++j)
                     builder.Append(arr[i][j] + (j < actionNum.Value - 1 ? "," : "\n"));
             }
-            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}");
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HRL/{fileName}");
             writer.Write(builder);
             writer.Flush();
         }
 
         void LoadArray(string fileName)
         {           
-            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/{fileName}"))
+            if (File.Exists(Application.streamingAssetsPath + $"/HRL/{fileName}"))
             {
                 string[] line;
-                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/{fileName}");
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HRL/{fileName}");
                 reader.ReadLine();
                 for (int i = 0; i < stateNum.Value; ++i)
                 {
@@ -169,16 +169,16 @@ namespace BehaviorDesigner.Runtime.Tasks
         void WriteData(HrlSelector node, string fileName)
         {
             string data = $"{node.Epoch},{node.Alpha},{node.Epsilon}";
-            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HrlSelector/{fileName}");
+            using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/HRL/{fileName}");
             writer.Write(data);
             writer.Flush();
         }
 
         void ReadData(string fileName)
         {
-            if (File.Exists(Application.streamingAssetsPath + $"/HrlSelector/{fileName}"))
+            if (File.Exists(Application.streamingAssetsPath + $"/HRL/{fileName}"))
             {
-                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HrlSelector/{fileName}");
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + $"/HRL/{fileName}");
                 string[] line = reader.ReadLine().Split(',');
                 _epoch = int.Parse(line[0]);
                 _alpha = double.Parse(line[1]);

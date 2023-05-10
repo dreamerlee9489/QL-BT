@@ -8,9 +8,10 @@ namespace App
 {
 	public class FoxController : MonoBehaviour
 	{
-        private TMP_Text _text;
         private BehaviorTree _bt;
         private SharedGameObject _nearRabbit;
+        private ParticleSystem _chunk;
+        private TMP_Text _text;
 
         public int hp = 100;
         public SharedGameObject NearRabbit => _nearRabbit;
@@ -20,6 +21,7 @@ namespace App
             _bt = GetComponent<BehaviorTree>();
             _nearRabbit = _bt.GetVariable("NearRabbit") as SharedGameObject;
             _text = transform.Find("Canvas").Find("HpText").GetComponent<TMP_Text>();
+            _chunk = Resources.Load<ParticleSystem>("Chunk");
             _bt.DisableBehavior();
         }
 
@@ -41,6 +43,7 @@ namespace App
             if (hp == 0)
             {
                 enemy.NearFox.Value = null;
+                Instantiate(_chunk, transform.position, transform.rotation).Play();
                 GameMgr.Instance.FoxIsDead(GetComponent<NavMeshAgent>());
             }
         }

@@ -20,7 +20,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _distSafe = Owner.GetVariable("DistSafe") as SharedInt;
             _distFox = Owner.GetVariable("DistFox") as SharedInt;
             _target = Owner.GetVariable("NearFox") as SharedGameObject;
-            _isHrl = GameMgr.Instance.btType == BtType.HrlSelector;
+            _isHrl = GameMgr.Instance.btType == BtType.HRL;
         }
 
         public override void OnStart()

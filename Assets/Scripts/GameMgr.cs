@@ -11,8 +11,8 @@ namespace App
     public enum HealthLevel { None, Low, Medium, High }
     public enum NeighbourNum { None, Low, Medium, High }
     public enum DistanceToPos { Inside, Near, Medium, Far }
-    public enum BtType { HandMade, QCondition, HrlSelector }
     public enum ActionSpace { Flee, SeekSafe, SeekFood, Eat, Flock, Wander, Charge, Assist }
+    public enum BtType { HM, QL, HRL }
 
     public class GameMgr : MonoBehaviour
     {
@@ -44,7 +44,8 @@ namespace App
             _liveFoxText = transform.Find("Canvas").Find("AliveFoxNum").GetComponent<Text>();
             _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
             _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
-            LoadQTable();
+            if (btType == BtType.QL)
+                LoadQTable();
         }
 
         private void Start()
@@ -52,13 +53,13 @@ namespace App
             Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
             switch (btType)
             {
-                case BtType.HandMade:
+                case BtType.HM:
                     _rabbitObj = Resources.Load<GameObject>("Rabbit");
                     break;
-                case BtType.QCondition:
+                case BtType.QL:
                     _rabbitObj = Resources.Load<GameObject>("QRabbit");
                     break;
-                case BtType.HrlSelector:
+                case BtType.HRL:
                     _rabbitObj = Resources.Load<GameObject>("HrlRabbit");
                     break;
             }
@@ -132,13 +133,13 @@ namespace App
             string fileName = "";
             switch (type)
             {
-                case BtType.HandMade:
+                case BtType.HM:
                     fileName = "HandMadeRecord";
                     break;
-                case BtType.QCondition:
+                case BtType.QL:
                     fileName = "QConditionRecord";
                     break;
-                case BtType.HrlSelector:
+                case BtType.HRL:
                     fileName = "HrlSelectorRecord";
                     break;
             }
@@ -196,22 +197,19 @@ namespace App
 
         private void LoadQTable()
         {
-            if (btType == BtType.QCondition)
+            _qTable = new float[1024][];
+            for (int i = 0; i < 1024; i++)
+                _qTable[i] = new float[8];
+            if (File.Exists(Application.streamingAssetsPath + "/QL/QTable.csv"))
             {
-                _qTable = new float[1024][];
-                for (int i = 0; i < 1024; i++)
-                    _qTable[i] = new float[8];
-                if (File.Exists(Application.streamingAssetsPath + "/QCondition/QTable.csv"))
+                string[] line;
+                using StreamReader reader = File.OpenText(Application.streamingAssetsPath + "/QL/QTable.csv");
+                reader.ReadLine();
+                for (int i = 0; i < 1024; ++i)
                 {
-                    string[] line;
-                    using StreamReader reader = File.OpenText(Application.streamingAssetsPath + "/QCondition/QTable.csv");
-                    reader.ReadLine();
-                    for (int i = 0; i < 1024; ++i)
-                    {
-                        line = reader.ReadLine().Split(',');
-                        for (int j = 0; j < 8; j++)
-                            _qTable[i][j] = float.Parse(line[j + 5]);
-                    }
+                    line = reader.ReadLine().Split(',');
+                    for (int j = 0; j < 8; j++)
+                        _qTable[i][j] = float.Parse(line[j + 5]);
                 }
             }
         }

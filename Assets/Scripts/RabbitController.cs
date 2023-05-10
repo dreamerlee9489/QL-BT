@@ -12,6 +12,7 @@ namespace App
         private SharedFloat _arriveDist, _viewDist, _neighDist, _fleeCD, _eatCD, _attackCD;
         private SharedInt _heathLv, _neighNum, _distFood, _distSafe, _distFox, _state;
         private SharedGameObject _nearFood, _nearSafe, _nearFox;
+        private ParticleSystem _chunk;
         private TMP_Text _hpText, _goalText;
 
         public int hp = 100;
@@ -41,6 +42,7 @@ namespace App
             _nearSafe = _bt.GetVariable("NearSafe") as SharedGameObject;
             _hpText = transform.Find("Canvas").Find("HpText").GetComponent<TMP_Text>();
             _goalText = transform.Find("Canvas").Find("GoalText").GetComponent<TMP_Text>();
+            _chunk = Resources.Load<ParticleSystem>("Chunk");
             _bt.DisableBehavior();
         }
 
@@ -98,6 +100,7 @@ namespace App
             if (hp == 0)
             {
                 enemy.NearRabbit.Value = null;
+                Instantiate(_chunk, transform.position, transform.rotation).Play();
                 GameMgr.Instance.RabbitIsDead(GetComponent<NavMeshAgent>());
             }
         }
