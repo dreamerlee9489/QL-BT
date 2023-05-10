@@ -20,13 +20,13 @@ namespace App
         private int _round, _liveRabbitNum, _safeRabbitNum, _liveFoxNum, _camIdx;
         private float _avgRabbitHp, _avgFoxHp, _gameTimer, _camTimer;
         private float[][] _qTable;
+        private GameObject _foxObj, _rabbitObj;
         private Text _roundText, _liveRabbitText, _safeRabbitText, _liveFoxText;
         private List<GameObject> _foods = new(), _safes = new(), _rabbits = new(), _foxs = new();
         private static GameMgr _instance = null;
 
         public BtType btType;
-        public int roundNum, foxNum, rabbitNum;
-        public GameObject foxObj, rabbitObj;
+        public int roundNum, rabbitNum, foxNum;
         
         public float[][] Q => _qTable;
         public List<GameObject> Rabbits => _rabbits;
@@ -44,25 +44,25 @@ namespace App
             _liveFoxText = transform.Find("Canvas").Find("AliveFoxNum").GetComponent<Text>();
             _foods = GameObject.FindGameObjectsWithTag("FoodPos").ToList();
             _safes = GameObject.FindGameObjectsWithTag("SafePos").ToList();
-            if (btType == BtType.QCondition)
-            {
-                _qTable = new float[1024][];
-                for (int i = 0; i < 1024; i++)
-                    _qTable[i] = new float[8];
-                if (File.Exists(Application.streamingAssetsPath + "/QTable.csv"))
-                {
-                    string[] line;
-                    using StreamReader reader = File.OpenText(Application.streamingAssetsPath + "/QTable.csv");
-                    reader.ReadLine();
-                    for (int i = 0; i < 1024; ++i)
-                    {
-                        line = reader.ReadLine().Split(',');
-                        for (int j = 0; j < 8; j++)
-                            _qTable[i][j] = float.Parse(line[j + 5]);
-                    }
-                }
-            }
+            LoadQTable();
+        }
+
+        private void Start()
+        {
             Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
+            switch (btType)
+            {
+                case BtType.HandMade:
+                    _rabbitObj = Resources.Load<GameObject>("Rabbit");
+                    break;
+                case BtType.QCondition:
+                    _rabbitObj = Resources.Load<GameObject>("QRabbit");
+                    break;
+                case BtType.HrlSelector:
+                    _rabbitObj = Resources.Load<GameObject>("HrlRabbit");
+                    break;
+            }
+            _foxObj = Resources.Load<GameObject>("Fox");
             ResetGame();
         }
 
@@ -102,13 +102,13 @@ namespace App
             {
                 for (int i = 0; i < rabbitNum; i++)
                 {
-                    GameObject rabbit = Instantiate(rabbitObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    GameObject rabbit = Instantiate(_rabbitObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
                     rabbit.name = "Rabbit_" + i;
                     _rabbits.Add(rabbit);
                 }
                 for (int i = 0; i < foxNum; i++)
                 {
-                    GameObject fox = Instantiate(foxObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
+                    GameObject fox = Instantiate(_foxObj, new Vector3(Random.Range(-500.0f / 2, 500.0f / 2), 1, Random.Range(-500.0f / 2, 500.0f / 2)), Quaternion.identity);
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }
@@ -165,38 +165,54 @@ namespace App
 
         public void RabbitEnterSafe(NavMeshAgent agent)
         {
+            agent.isStopped = true;
+            agent.GetComponent<BehaviorTree>().DisableBehavior();
             if (++_safeRabbitNum == _rabbits.Count)
                 RecordGame(btType, "All Rabbits is safe");
             _safeRabbitText.text = _safeRabbitNum.ToString();
-            agent.isStopped = true;
-            agent.GetComponent<BehaviorTree>().DisableBehavior();
         }
 
         public void RabbitIsDead(NavMeshAgent agent)
         {
+            agent.isStopped = true;
+            agent.enabled = false;
+            agent.gameObject.SetActive(false);
+            agent.GetComponent<BehaviorTree>().DisableBehavior();
             if (--_liveRabbitNum == 0)
                 RecordGame(btType, "All Rabbits is dead");
             _liveRabbitText.text = _liveRabbitNum.ToString();
-            if (agent.enabled)
-            {
-                agent.isStopped = true;
-                agent.enabled = false;
-                agent.gameObject.SetActive(false);
-                agent.GetComponent<BehaviorTree>().DisableBehavior();
-            }
         }
 
         public void FoxIsDead(NavMeshAgent agent)
         {
+            agent.isStopped = true;
+            agent.enabled = false;
+            agent.gameObject.SetActive(false);
+            agent.GetComponent<BehaviorTree>().DisableBehavior();
             if (--_liveFoxNum == 0)
                 RecordGame(btType, "All Foxs is dead");
             _liveFoxText.text = _liveFoxNum.ToString();
-            if (agent.enabled)
+        }
+
+        private void LoadQTable()
+        {
+            if (btType == BtType.QCondition)
             {
-                agent.isStopped = true;
-                agent.enabled = false;
-                agent.gameObject.SetActive(false);
-                agent.GetComponent<BehaviorTree>().DisableBehavior();
+                _qTable = new float[1024][];
+                for (int i = 0; i < 1024; i++)
+                    _qTable[i] = new float[8];
+                if (File.Exists(Application.streamingAssetsPath + "/QCondition/QTable.csv"))
+                {
+                    string[] line;
+                    using StreamReader reader = File.OpenText(Application.streamingAssetsPath + "/QCondition/QTable.csv");
+                    reader.ReadLine();
+                    for (int i = 0; i < 1024; ++i)
+                    {
+                        line = reader.ReadLine().Split(',');
+                        for (int j = 0; j < 8; j++)
+                            _qTable[i][j] = float.Parse(line[j + 5]);
+                    }
+                }
             }
         }
     }
