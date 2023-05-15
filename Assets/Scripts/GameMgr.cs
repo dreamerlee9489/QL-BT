@@ -12,7 +12,7 @@ namespace App
     public enum NeighbourNum { None, Low, Medium, High }
     public enum DistanceToPos { Inside, Near, Medium, Far }
     public enum ActionSpace { Flee, SeekSafe, SeekFood, Eat, Flock, Wander, Charge, Assist }
-    public enum BtType { HM, QL, HRL }
+    public enum BtType { HandMade, QL, HRL }
 
     public class GameMgr : MonoBehaviour
     {
@@ -53,7 +53,7 @@ namespace App
             Camera.main.transform.rotation = Quaternion.Euler(90, 0, 0);
             switch (btType)
             {
-                case BtType.HM:
+                case BtType.HandMade:
                     _rabbitObj = Resources.Load<GameObject>("Rabbit");
                     break;
                 case BtType.QL:
@@ -133,7 +133,7 @@ namespace App
             string fileName = "";
             switch (type)
             {
-                case BtType.HM:
+                case BtType.HandMade:
                     fileName = "HandMadeRecord";
                     break;
                 case BtType.QL:

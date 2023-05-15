@@ -2886,7 +2886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5c2a5b4de95e846865af393802ca89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  btType: 2
+  btType: 0
   roundNum: 100
   rabbitNum: 100
   foxNum: 20

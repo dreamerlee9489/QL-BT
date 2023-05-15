@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
@@ -26,6 +25,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         public double Epsilon => _epsilon;
         public double[][] Q => _qTable;
         public double[][] R => _rTable;
+
+        public double GetReward() => _highestReward;
 
         public override int CurrentChildIndex() => _currIndex;
 
@@ -50,11 +51,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         }
 
         public override void OnStart()
-        {
-            ++_epoch;
-            _alpha = alphaMax.Value / (1.0 + alphaDecay.Value * _epoch);
-            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
-
+        {           
             _highestReward = double.MinValue;
             _availableIndexs.Clear();
             for (int i = 0; i < children.Count; ++i)
@@ -102,6 +99,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (_availableIndexs.Count == 0)
                 return -1;
+            _alpha = alphaMax.Value / (1.0 + alphaDecay.Value * ++_epoch);
+            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
             _prevState = _currState.Value;
             if (Random.Range(0.0f, 1.0f) < epsilon)
                 return _availableIndexs[Random.Range(0, _availableIndexs.Count)];
@@ -126,9 +125,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             _qTable[_prevState][action] += _alpha * (reward + gamma.Value * _qTable[_nextState].Max());
             _highestReward = System.Math.Max(_highestReward, reward);
             //Debug.Log($"{FriendlyName}: Q[{_prevState}][{_currIndex}]={_qTable[_prevState][_currIndex]}");
-        }
-
-        public double GetReward() => _highestReward;
+        }       
 
         void PrintArray(double[][] arr, string fileName)
         {
