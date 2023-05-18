@@ -11,7 +11,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         protected int _epoch, _currIndex, _prevState, _nextState;
         protected double _highestReward, _alpha, _epsilon;
-        protected double[][] _qTable, _rTable;
+        protected double[][] _qTable;
         protected SharedInt _currState;
         protected TaskStatus _childStatus = TaskStatus.Inactive;
         protected List<int> _availableIndexs = new();
@@ -24,7 +24,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         public double Alpha => _alpha;
         public double Epsilon => _epsilon;
         public double[][] Q => _qTable;
-        public double[][] R => _rTable;
 
         public double GetReward() => _highestReward;
 
@@ -40,12 +39,8 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             _currState = Owner.GetVariable("State") as SharedInt;
             _qTable = new double[stateNum.Value][];
-            _rTable = new double[stateNum.Value][];
             for (int i = 0; i < stateNum.Value; ++i)
-            {
                 _qTable[i] = new double[actionNum.Value];
-                _rTable[i] = new double[actionNum.Value];
-            }
             LoadArray($"Q_{FriendlyName}.csv");
             ReadData($"Data_{FriendlyName}.txt");
         }
@@ -120,7 +115,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         protected void UpdateQTable(int action)
         {
             double reward = (children[action] as IRewarder).GetReward();
-            _rTable[_prevState][action] = reward;
             _qTable[_prevState][action] *= 1 - _alpha;
             _qTable[_prevState][action] += _alpha * (reward + gamma.Value * _qTable[_nextState].Max());
             _highestReward = System.Math.Max(_highestReward, reward);

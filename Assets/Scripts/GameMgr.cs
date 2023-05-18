@@ -27,7 +27,7 @@ namespace App
 
         public BtType btType;
         public int roundNum, rabbitNum, foxNum;
-        
+
         public float[][] Q => _qTable;
         public List<GameObject> Rabbits => _rabbits;
         public List<GameObject> Foxs => _foxs;
@@ -152,14 +152,10 @@ namespace App
             _avgRabbitHp = sumRabbitHp * 1.0f / _rabbits.Count;
             _avgFoxHp = sumFoxHp * 1.0f / _foxs.Count;
             if (!File.Exists($"{Application.streamingAssetsPath}/{fileName}.csv"))
-            {
-                using StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/{fileName}.csv");
-                writer.WriteLine("AliveRabbitNum,SafeRabbitNum,AvgRabbitHp,AliveFoxNum,AvgFoxHp");
-            }
+                using (StreamWriter writer = File.CreateText($"{Application.streamingAssetsPath}/{fileName}.csv"))
+                    writer.WriteLine("AliveRabbitNum,SafeRabbitNum,AvgRabbitHp,AliveFoxNum,AvgFoxHp");
             using (StreamWriter writer = File.AppendText($"{Application.streamingAssetsPath}/{fileName}.csv"))
-            {
                 writer.WriteLine($"{_liveRabbitNum},{_safeRabbitNum},{_avgRabbitHp},{_liveFoxNum},{_avgFoxHp}");
-            }
             ResetGame();
             Debug.Log("RecordGame: " + info);
         }
@@ -168,9 +164,9 @@ namespace App
         {
             agent.isStopped = true;
             agent.GetComponent<BehaviorTree>().DisableBehavior();
-            if (++_safeRabbitNum == _rabbits.Count)
+            _safeRabbitText.text = (++_safeRabbitNum).ToString();
+            if (_safeRabbitNum == _rabbits.Count)
                 RecordGame(btType, "All Rabbits is safe");
-            _safeRabbitText.text = _safeRabbitNum.ToString();
         }
 
         public void RabbitIsDead(NavMeshAgent agent)
@@ -179,9 +175,9 @@ namespace App
             agent.enabled = false;
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
-            if (--_liveRabbitNum == 0)
+            _liveRabbitText.text = (--_liveRabbitNum).ToString();
+            if (_liveRabbitNum == 0)
                 RecordGame(btType, "All Rabbits is dead");
-            _liveRabbitText.text = _liveRabbitNum.ToString();
         }
 
         public void FoxIsDead(NavMeshAgent agent)
@@ -190,9 +186,9 @@ namespace App
             agent.enabled = false;
             agent.gameObject.SetActive(false);
             agent.GetComponent<BehaviorTree>().DisableBehavior();
-            if (--_liveFoxNum == 0)
+            _liveFoxText.text = (--_liveFoxNum).ToString();
+            if (_liveFoxNum == 0)
                 RecordGame(btType, "All Foxs is dead");
-            _liveFoxText.text = _liveFoxNum.ToString();
         }
 
         private void LoadQTable()
