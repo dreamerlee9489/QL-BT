@@ -46,7 +46,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         }
 
         public override void OnStart()
-        {           
+        {
+            _alpha = alphaMax.Value / (1.0 + alphaDecay.Value * ++_epoch);
+            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
             _highestReward = double.MinValue;
             _availableIndexs.Clear();
             for (int i = 0; i < children.Count; ++i)
@@ -94,15 +96,13 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (_availableIndexs.Count == 0)
                 return -1;
-            _alpha = alphaMax.Value / (1.0 + alphaDecay.Value * ++_epoch);
-            _epsilon = System.Math.Max(epsilonMin.Value, epsilonMax.Value * System.Math.Pow(epsilonDecay.Value, _epoch));
             _prevState = _currState.Value;
             if (Random.Range(0.0f, 1.0f) < epsilon)
                 return _availableIndexs[Random.Range(0, _availableIndexs.Count)];
             else
             {
                 double max = _qTable[state].Max();
-                if (max < -5)
+                if (max < -1)
                 {
                     _currIndex = 0;
                     _childStatus = TaskStatus.Success;
