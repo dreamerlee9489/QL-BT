@@ -145,5 +145,12 @@ namespace BehaviorDesigner.Runtime.Tasks
                 executionStatus = TaskStatus.Inactive;
             }
         }
+
+        public override float GetUtility()
+        {
+            if (highestUtility != float.MinValue)
+                return highestUtility;
+            return 0;
+        }
     }
 }
