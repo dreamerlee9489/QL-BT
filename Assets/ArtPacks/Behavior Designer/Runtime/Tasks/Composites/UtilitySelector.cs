@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
@@ -18,14 +19,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         private bool reevaluating;
         // A list of children that can execute.
         private List<int> availableChildren = new List<int>();
-        private SharedFloat _sharedUtitlty;
-
-
-        public override void OnAwake()
-        {
-            base.OnAwake();
-            _sharedUtitlty = Owner.GetVariable($"{FriendlyName}Utility") as SharedFloat;
-        }
 
         public override void OnStart()
         {
@@ -55,7 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         }
 
         public override bool CanExecute()
-        {
+        {           
             // Continue to execute new tasks until a task returns success or there are no more children left. If reevaluating then return false
             // immediately because each task doesn't need to be reevaluted.
             if (executionStatus == TaskStatus.Success || executionStatus == TaskStatus.Running || reevaluating) {
@@ -151,12 +144,6 @@ namespace BehaviorDesigner.Runtime.Tasks
                 BehaviorManager.instance.Interrupt(Owner, children[prevChildIndex], this, TaskStatus.Failure);
                 executionStatus = TaskStatus.Inactive;
             }
-        }
-
-        public override float GetUtility()
-        {
-            _sharedUtitlty.Value = base.GetUtility();
-            return _sharedUtitlty.Value;
         }
     }
 }

@@ -1,7 +1,6 @@
 using App;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks
 {
@@ -9,7 +8,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         private SharedInt _state;
         private SharedGameObject _target;
-        private readonly Dictionary<int, float> _bestStates = new();
+        private readonly Dictionary<int, float> _states = new();
 
         public override void OnAwake()
         {
@@ -19,23 +18,22 @@ namespace BehaviorDesigner.Runtime.Tasks
             for (int i = 0; i < 1024; ++i)
             {
                 float max = qTable[i].Max();
-                if (max == qTable[i][(int)ActionSpace.SeekSafe])
-                    _bestStates.Add(i, qTable[i][(int)ActionSpace.SeekSafe]);
+                if (max == 0)
+                    qTable[i][(int)ActionSpace.SeekSafe] = 1;
+                _states.Add(i, qTable[i][(int)ActionSpace.SeekSafe]);
             }
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (_target.Value != null && _bestStates.ContainsKey(_state.Value))
+            if (_target.Value != null)
                 return TaskStatus.Success;
             return TaskStatus.Failure;
         }
 
         public override float GetUtility()
         {
-            if (_bestStates.ContainsKey(_state.Value))
-                return _bestStates[_state.Value];
-            return 0;
+            return _states[_state.Value];
         }
     }
 }
