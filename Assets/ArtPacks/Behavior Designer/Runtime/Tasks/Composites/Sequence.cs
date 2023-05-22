@@ -31,6 +31,8 @@
         public override void OnConditionalAbort(int childIndex)
         {
             // Set the current child index to the index that caused the abort
+            for (int i = 0; i < children.Count; i++)
+                BehaviorManager.instance.Interrupt(Owner, children[i], this, TaskStatus.Failure);
             currentChildIndex = childIndex;
             executionStatus = TaskStatus.Inactive;
         }

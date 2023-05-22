@@ -19,7 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 float max = qTable[i].Max();
                 if (max == 0)
-                    qTable[i][(int)ActionSpace.SeekSafe] = 1;
+                    qTable[i][(int)ActionSpace.SeekSafe] = 10;
                 _states.Add(i, qTable[i][(int)ActionSpace.SeekSafe]);
             }
         }

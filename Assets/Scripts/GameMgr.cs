@@ -75,13 +75,13 @@ namespace App
                 _camTimer += Time.deltaTime;
                 if (_gameTimer >= 120.0f)
                     RecordGame(btType, "Time Over");
-                if (_camTimer >= 15.0f)
-                {
-                    _camTimer = 0;
-                    _camIdx = -1;
-                    do _camIdx = Random.Range(0, _rabbits.Count);
-                    while (!_rabbits[_camIdx].activeSelf);
-                }
+                //if (_camTimer >= 15.0f)
+                //{
+                //    _camTimer = 0;
+                //    _camIdx = -1;
+                //    do _camIdx = Random.Range(0, _rabbits.Count);
+                //    while (!_rabbits[_camIdx].activeSelf);
+                //}
             }
         }
 
@@ -113,7 +113,8 @@ namespace App
                     fox.name = "Fox_" + i;
                     _foxs.Add(fox);
                 }
-                _camIdx = Random.Range(0, _rabbits.Count);
+                //_camIdx = Random.Range(0, _rabbits.Count);
+                _camIdx = 50;
                 _liveRabbitNum = _rabbits.Count;
                 _liveFoxNum = _foxs.Count;
                 _safeRabbitNum = 0;
